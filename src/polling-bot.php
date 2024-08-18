@@ -3,8 +3,8 @@
 
 
 require_once __DIR__ . '/vendor/autoload.php';
-$config = require __DIR__ . '/data/config.php';
-$text = require __DIR__ . '/data/texts.php';
+$config = require __DIR__ . '/config/config.php';
+$text = require __DIR__ . '/config/texts.php';
 
 
 use Monolog\Logger;
@@ -12,13 +12,13 @@ use Monolog\Handler\StreamHandler;
 
 $logger = new Logger('bstil', [new StreamHandler('php://stdout', Logger::INFO)]);
 
-$cfg = $config['postgresql'];
-$db = pg_connect("
-    host={$cfg['host']}
-    user={$cfg['user']}
-    password={$cfg['password']}
-    dbname={$cfg['dbname']}
-");
+// $cfg = $config['postgresql'];
+// $db = pg_connect("
+//     host={$cfg['host']}
+//     user={$cfg['user']}
+//     password={$cfg['password']}
+//     dbname={$cfg['dbname']}
+// ");
 
 // интеграция https://business.ru
 use bru\api\Client;

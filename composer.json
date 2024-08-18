@@ -1,8 +1,0 @@
-{
-    "require": {
-        "nutgram/nutgram": "^4.19",
-        "apix/log": "^1.2",
-        "monolog/monolog": "^2.9",
-        "business-ru/business-online-sdk-php": "^1.4"
-    }
-}
