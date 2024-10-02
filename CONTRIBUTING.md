@@ -1,0 +1,1 @@
+Cписок текущих задач: [Github Issues](https://github.com/zaboal/bru_tg/issues).
