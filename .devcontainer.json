@@ -1,9 +1,18 @@
 {
-	"name" : "containerfile",
-	"build": {	
-		"dockerfile": "Containerfile"
+	"build": {
+		"dockerfile": "Containerfile",
+		"target": "dev" // instead of features, alpine packages are used
 	},
-	"features": {
-		"ghcr.io/devcontainers/features/git:1": {}
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"zobo.php-intellisense", // php intelligence
+				"kokororin.vscode-phpfmt" // php formatter
+			],
+			"settings": {
+				"editor.formatOnSave": true,
+				"terminal.integrated.shell": "/bin/fish"
+			}
+		}
 	}
 }

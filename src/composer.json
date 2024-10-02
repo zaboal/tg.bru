@@ -1,19 +1,14 @@
 {
-    "config": {
-        "platform": {
-            "php": "8.0.30"
-        }
-    },
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/okopok/business-online-sdk-php"
+            "url": "https://github.com/zaboal/bru_php"
         }
     ],
     "require": {
-        "apix/log": "^1.2",
-        "monolog/monolog": "^2.9",
-        "business-ru/business-online-sdk-php": "dev-master#a2d8ed5189b88c6146433af7e65e650999a1843d",
-        "nutgram/nutgram": "^3.20"
+        "apix/log": "^1.3",
+        "monolog/monolog": "^3.7",
+        "nutgram/nutgram": "^4.27",
+        "business-ru/business-online-sdk-php": "^1.5"
     }
 }
