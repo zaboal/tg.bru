@@ -1,8 +1,0 @@
-(A) make notifications on points *crease
-    switch to hooking with https://github.com/adnanh/webhook
-    subscribe to and process discountcards
-
-(B) make a sellable database {c}
-    scheme a main database for sqlite
-
-(C) make webui for editing data/texts.php
