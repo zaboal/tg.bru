@@ -1,5 +1,9 @@
+# Вместо .dockerignore/.containerignore
+# линковать на этот файл.
+
+# сервис
 src/config
 
 # php
 vendor
-composer.lock
+src/composer.lock
