@@ -1,8 +1,13 @@
 {
+	// "overrideCommand": false,
+	"postStartCommand": "fish",
 	"build": {
 		"dockerfile": "Containerfile",
-		"target": "dev" // instead of features, alpine packages are used
+		"target": "dev" // вместо нестабильных "features" - пакеты apline
 	},
+	"mounts": [
+		"source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached"
+	],
 	"customizations": {
 		"vscode": {
 			"extensions": [

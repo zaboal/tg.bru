@@ -1,23 +1,25 @@
 FROM docker.io/library/php:8.3-alpine AS base
 
-LABEL org.opencontainers.image.url https://github.com/zaboal/bru_tg
+LABEL org.opencontainers.image.url=https://github.com/zaboal/bru_tg
 
-RUN apk add composer
+RUN apk add composer git
 
 
-# Preparing environment for development,
-# further info in CONTRIBUTING.md.
+# Подготовка окружения для разработки,
+# подробнее в CONTRIBUTING.md.
 
 FROM base AS dev
 
-RUN apk add git python3 fish github-cli
+# для подписи коммитов
+RUN apk add gpg gpg-agent openssh
+RUN apk add python3 fish github-cli
 
 CMD ["fish"]
 
 
-# Preparing the app to be executed and executing.
-# Must be placed as the latest stage in this file
-# to be used by default, without target specifying.
+# Подготовка приложения к запуску и запуск.
+# Должно быть последней стадией в этом файле,
+# чтобы использовалось по умолчанию, без указания.
 
 FROM base AS prod
 
@@ -26,5 +28,5 @@ WORKDIR /usr/src/app
 
 RUN composer install
 
-# "php" and "php8" behave pretty different
-ENTRYPOINT ["php8", "polling-bot.php"]
+# "php" это не "phpXX"
+ENTRYPOINT ["php83", "polling-bot.php"]
