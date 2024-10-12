@@ -7,6 +7,7 @@ $text = require __DIR__ . '/config/texts.php';
 
 use bru\api\Client;
 use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 $logger = new Logger('bstil', [new StreamHandler('php://stdout', Logger::INFO)]);
 
@@ -19,8 +20,6 @@ $logger = new Logger('bstil', [new StreamHandler('php://stdout', Logger::INFO)])
 // ");
 
 // интеграция https://business.ru
-use Monolog\Logger;
-
 $cfg = $config['business_ru'];
 $bru = new Client(
     account: $cfg['account'],
