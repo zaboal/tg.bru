@@ -2,7 +2,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/zaboal/bru_php"
+            "url": "https://gitflic.ru/project/bstil/bru_php.git"
         }
     ],
     "require": {
