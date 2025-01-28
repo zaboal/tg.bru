@@ -5,7 +5,7 @@ return [
         'bot_username'  => 'ExampleBot',
         'api_key'       => '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
         'admins'        => [
-            987595197,  // зажигин богдан алексеевич, https://t.me/zaboal
+            987595197,  // Зажигин Богдаун Алексеевич, https://t.me/zaboal
         ]
     ],
     'business_ru'       => [
