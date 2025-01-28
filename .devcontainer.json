@@ -2,7 +2,7 @@
 	// "overrideCommand": false,
 	"postStartCommand": "fish",
 	"build": {
-		"dockerfile": "dockerfile",
+		"dockerfile": "Dockerfile",
 		"target": "dev" // вместо нестабильных "features" - пакеты apline
 	},
 	"mounts": [

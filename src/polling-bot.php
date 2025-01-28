@@ -2,7 +2,7 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
-$text = require __DIR__ . '/config/texts.php';
+$text = require __DIR__ . '/texts.php';
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
@@ -17,23 +17,14 @@ $account = $_ENV['account'];
 $secret = $_ENV[ 'secret' ];
 $app_id = $_ENV[ 'app_id' ];
 
-print $account;
-print "123\n";
-print $secret;
-print "123\n";
-print $app_id;
-print "123\n";
-
 if ($account === false || $secret === false || $app_id === false) {
     throw new InvalidArgumentException('Check .env (business section)');
 }
 
-$secret = (int) $secret;
-
 $bru = new Client(
     account: $_ENV['account'],
-    secret: (int) $_ENV['secret'],
-    app_id: $_ENV['app_id'],
+    secret: $_ENV['secret'],
+    app_id: (int) $_ENV['app_id'],
     sleepy: true
 );
 
@@ -85,6 +76,8 @@ $tg->onContact(function (Nutgram $tg) use ($bru, $logger, $text) {
 
     $cards = $bru->request('get', 'discountcards', ['num' => $phone])['result'];
 
+	echo 123;
+
     // если телефонный номер не пренадлежит пользователю
     if ($message->from->id != $message->contact->user_id) {
         $vicar = true;
@@ -92,8 +85,11 @@ $tg->onContact(function (Nutgram $tg) use ($bru, $logger, $text) {
         $vicar = false;
     }
 
-    // и если он не админ
-	$admins = array_map('interval', explode(',', $_ENV['amdins'] ?? ''));
+	$adminsString = $_ENV['admins'] ?? '';
+
+	$adminsArray = $adminsString ? explode(',', $adminsString) : [];
+
+	$admins = array_map('intval', $adminsArray);
     if ($vicar && !in_array($message->from->id, $admins)) {
         return;
     }
