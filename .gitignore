@@ -8,3 +8,4 @@ src/config
 vendor
 src/composer.lock
 .env
+src/.env

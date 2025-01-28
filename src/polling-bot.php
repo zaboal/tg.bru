@@ -2,8 +2,10 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
-$config = require __DIR__ . '/config/config.php';
 $text = require __DIR__ . '/config/texts.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 use bru\api\Client;
 use Monolog\Handler\StreamHandler;
@@ -11,20 +13,27 @@ use Monolog\Logger;
 
 $logger = new Logger('bstil', [new StreamHandler('php://stdout', Logger::INFO)]);
 
-// $cfg = $config['postgresql'];
-// $db = pg_connect("
-//     host={$cfg['host']}
-//     user={$cfg['user']}
-//     password={$cfg['password']}
-//     dbname={$cfg['dbname']}
-// ");
+$account = $_ENV['account'];
+$secret = $_ENV[ 'secret' ];
+$app_id = $_ENV[ 'app_id' ];
 
-// интеграция https://business.ru
-$cfg = $config['business_ru'];
+print $account;
+print "123\n";
+print $secret;
+print "123\n";
+print $app_id;
+print "123\n";
+
+if ($account === false || $secret === false || $app_id === false) {
+    throw new InvalidArgumentException('Check .env (business section)');
+}
+
+$secret = (int) $secret;
+
 $bru = new Client(
-    account: $cfg['account'],
-    secret: $cfg['secret'],
-    app_id: $cfg['app_id'],
+    account: $_ENV['account'],
+    secret: (int) $_ENV['secret'],
+    app_id: $_ENV['app_id'],
     sleepy: true
 );
 
@@ -40,8 +49,13 @@ use SergiX44\Nutgram\Telegram\Types\Keyboard\KeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardMarkup;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardRemove;
 
-$cfg = $config['telegram'];
-$tg = new Nutgram($cfg['api_key'], new Configuration(
+$api_key = $_ENV[ 'api_key' ];
+
+if ($api_key === false) {
+    throw new InvalidArgumentException('No api_key');
+}
+
+$tg = new Nutgram($_ENV['api_key'], new Configuration(
     logger: new Logger('tg', [new StreamHandler('php://stdout', Logger::INFO)])
 ));
 $tg->setRunningMode(Polling::class);
@@ -62,7 +76,7 @@ $tg->onCommand('start', function (Nutgram $tg) use ($text) {
 });
 
 // запоминание телефонного номера после "/start"
-$tg->onContact(function (Nutgram $tg) use ($bru, $logger, $config, $text) {
+$tg->onContact(function (Nutgram $tg) use ($bru, $logger, $text) {
     $message = $tg->message();
     $contact = $message->contact;
 
@@ -79,7 +93,8 @@ $tg->onContact(function (Nutgram $tg) use ($bru, $logger, $config, $text) {
     }
 
     // и если он не админ
-    if ($vicar && !in_array($message->from->id, $config['telegram']['admins'])) {
+	$admins = array_map('interval', explode(',', $_ENV['amdins'] ?? ''));
+    if ($vicar && !in_array($message->from->id, $admins)) {
         return;
     }
 
