@@ -1,1 +1,0 @@
-In the Bogdaun community, participants from all over the world come together to create Free Software for a free internet. This is made possible by the support, hard work and enthusiasm of thousands of people, including those who create and use Bogdaun software.

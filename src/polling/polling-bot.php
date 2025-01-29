@@ -49,11 +49,6 @@ $tg = new Nutgram($api_key, new Configuration(
 ));
 $tg->setRunningMode(Polling::class);
 
-$webhook = new Webhook(secretToken: 'your-secret-token');
-$webhook->setSafeMode(true);
-
-$tg->setRunningMode($webhook)
-
 // получение телефонного номера пользователя с запуском бота
 $tg->onCommand('start', function (Nutgram $tg) use ($text) {
     $keyboard = new ReplyKeyboardMarkup(
