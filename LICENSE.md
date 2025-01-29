@@ -1,4 +1,4 @@
-Business.ru for Telegram (c) by Zazhigin Bogdan Alekseevich
+Business.ru for Telegram (c) by Zazhigin Bogdaun Alekseevich
 
 Business.ru for Telegram is licensed under a
 Creative Commons Attribution-NonCommercial 4.0 International License.
