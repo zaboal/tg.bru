@@ -34,6 +34,7 @@ $bru->setLogger(new Logger('bru', [new StreamHandler('php://stdout', Logger::INF
 use SergiX44\Nutgram\Configuration;
 use SergiX44\Nutgram\Nutgram;
 use SergiX44\Nutgram\RunningMode\Polling;
+use SergiX44\Nutgram\RunningMode\Webhook;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardMarkup;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\KeyboardButton;
@@ -50,6 +51,11 @@ $tg = new Nutgram($_ENV['api_key'], new Configuration(
     logger: new Logger('tg', [new StreamHandler('php://stdout', Logger::INFO)])
 ));
 $tg->setRunningMode(Polling::class);
+
+$webhook = new Webhook(secretToken: 'your-secret-token');
+$webhook->setSafeMode(true);
+
+$tg->setRunningMode($webhook)
 
 // получение телефонного номера пользователя с запуском бота
 $tg->onCommand('start', function (Nutgram $tg) use ($text) {
