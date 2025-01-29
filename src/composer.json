@@ -10,8 +10,5 @@
         "monolog/monolog": "^3.7",
         "nutgram/nutgram": "^4.27",
         "business-ru/business-online-sdk-php": "^1.5"
-    },
-    "require-dev": {
-        "vlucas/phpdotenv": "^5.6"
     }
 }

@@ -4,27 +4,24 @@
 require_once __DIR__ . '/vendor/autoload.php';
 $text = require __DIR__ . '/texts.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
 use bru\api\Client;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 $logger = new Logger('bstil', [new StreamHandler('php://stdout', Logger::INFO)]);
 
-$account = $_ENV['account'];
-$secret = $_ENV[ 'secret' ];
-$app_id = $_ENV[ 'app_id' ];
+$account = $_ENV['ACCOUNT'];
+$secret = $_ENV[ 'SECRET' ];
+$app_id = $_ENV[ 'APP_ID' ];
 
 if ($account === false || $secret === false || $app_id === false) {
     throw new InvalidArgumentException('Check .env (business section)');
 }
 
 $bru = new Client(
-    account: $_ENV['account'],
-    secret: $_ENV['secret'],
-    app_id: (int) $_ENV['app_id'],
+    account: $_ENV['ACCOUNT'],
+    secret: $_ENV['SECRET'],
+    app_id: (int) $_ENV['APP_ID'],
     sleepy: true
 );
 
@@ -40,13 +37,13 @@ use SergiX44\Nutgram\Telegram\Types\Keyboard\KeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardMarkup;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardRemove;
 
-$api_key = $_ENV[ 'api_key' ];
+$api_key = $_ENV[ 'API_KEY' ];
 
 if ($api_key === false) {
     throw new InvalidArgumentException('No api_key');
 }
 
-$tg = new Nutgram($_ENV['api_key'], new Configuration(
+$tg = new Nutgram($api_key, new Configuration(
     logger: new Logger('tg', [new StreamHandler('php://stdout', Logger::INFO)])
 ));
 $tg->setRunningMode(Polling::class);
@@ -75,8 +72,6 @@ $tg->onContact(function (Nutgram $tg) use ($bru, $logger, $text) {
     $phone = substr($phone, strlen($phone) - 10); # оставить последние десять цифр номера, т.е. без +7
 
     $cards = $bru->request('get', 'discountcards', ['num' => $phone])['result'];
-
-	echo 123;
 
     // если телефонный номер не пренадлежит пользователю
     if ($message->from->id != $message->contact->user_id) {
