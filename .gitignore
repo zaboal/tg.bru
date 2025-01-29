@@ -1,8 +1,7 @@
 # Вместо .dockerignore/.containerignore
 # линковать на этот файл.
 
-# сервис
-src/config
+.env
 
 # php
 vendor
