@@ -31,6 +31,7 @@ $bru->setLogger(new Logger('bru', [new StreamHandler('php://stdout', Logger::INF
 use SergiX44\Nutgram\Configuration;
 use SergiX44\Nutgram\Nutgram;
 use SergiX44\Nutgram\RunningMode\Polling;
+use SergiX44\Nutgram\RunningMode\Webhook;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardMarkup;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\KeyboardButton;
