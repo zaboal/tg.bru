@@ -1,0 +1,21 @@
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://gitflic.ru/project/bstil/bru_php.git"
+        },
+		{
+			"type": "vcs",
+			"url": "https://github.com/sh1nez/nutgram.git"
+		}
+    ],
+    "require": {
+        "apix/log": "^1.3",
+        "monolog/monolog": "^3.7",
+        "sh1nez/nutgram": "^1.0",
+        "business-ru/business-online-sdk-php": "^1.5"
+    },
+    "require-dev": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
