@@ -1101,12 +1101,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sh1nez/bru.git",
-                "reference": "12cfd814ab5e8294ebeef5059bef2c7b4f46921e"
+                "reference": "24c109bcb9e7774be92034484490f96fa855e4f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sh1nez/bru/zipball/12cfd814ab5e8294ebeef5059bef2c7b4f46921e",
-                "reference": "12cfd814ab5e8294ebeef5059bef2c7b4f46921e",
+                "url": "https://api.github.com/repos/sh1nez/bru/zipball/24c109bcb9e7774be92034484490f96fa855e4f6",
+                "reference": "24c109bcb9e7774be92034484490f96fa855e4f6",
                 "shasum": ""
             },
             "require": {
@@ -1138,7 +1138,7 @@
             "support": {
                 "source": "https://github.com/sh1nez/bru/tree/master"
             },
-            "time": "2025-01-30T17:39:06+00:00"
+            "time": "2025-01-30T17:51:29+00:00"
         },
         {
             "name": "sh1nez/nutgram",
