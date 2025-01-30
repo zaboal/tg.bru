@@ -74,6 +74,8 @@ $tg->onContact(function (Nutgram $tg) use ($bru, $logger, $text) {
 
     $cards = $bru->request('get', 'discountcards', ['num' => $phone])['result'];
 
+	echo 123;
+
     // если телефонный номер не пренадлежит пользователю
     if ($message->from->id != $message->contact->user_id) {
         $vicar = true;
