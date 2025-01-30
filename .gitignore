@@ -1,9 +1,8 @@
 # Вместо .dockerignore/.containerignore
 # линковать на этот файл.
 
-.env
-
 # php
 vendor
 src/composer.lock
 .env
+*.zip

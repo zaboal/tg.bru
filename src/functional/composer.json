@@ -1,8 +1,10 @@
 {
+	"minimum-stability": "dev",
+    "prefer-stable": true,
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://gitflic.ru/project/bstil/bru_php.git"
+            "url": "https://github.com/sh1nez/bru.git"
         },
 		{
 			"type": "vcs",
@@ -13,7 +15,7 @@
         "apix/log": "^1.3",
         "monolog/monolog": "^3.7",
         "sh1nez/nutgram": "^1.1",
-        "business-ru/business-online-sdk-php": "^1.5"
+        "sh1nez/bru": "dev-no-cache"
     },
     "require-dev": {
         "vlucas/phpdotenv": "^5.6"
