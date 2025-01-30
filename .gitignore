@@ -3,6 +3,6 @@
 
 # php
 vendor
-src/composer.lock
+composer.lock
 .env
 *.zip
