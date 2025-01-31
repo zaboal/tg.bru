@@ -1,22 +1,18 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
-Dotenv\Dotenv::createImmutable(__DIR__)->load();
-
-function log_message($incoming_message)
+function log_message($incoming_message): void
 {
-	echo $_ENV["TOKEN"];
 	$data = json_decode($incoming_message, true);
 
 	if ($data === null) {
-		echo "Ошибка при декодировании JSON!";
+		echo "Json decode error";
 		exit;
 	}
 
 	$json_data = json_encode(array("data" => json_encode($data)));
 
 	if ($json_data === false) {
-		echo "Ошибка при кодировании JSON!";
+		echo "Json decode error";
 		exit;
 	}
 

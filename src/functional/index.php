@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/log.php';
 
@@ -149,3 +147,5 @@ function handler($event, $context)
 	log_message($event['body']);
 	$tg->run($event['body']);
 }
+
+/* handler(['body' => '{"update_id":562885573,"message":{"message_id":527,"from":{"id":5976605989,"is_bot":false,"first_name":"2happy","username":"gentuwu","language_code":"en","is_premium":true},"chat":{"id":5976605989,"first_name":"2happy","username":"gentuwu","type":"private"},"date":1738247132,"reply_to_message":{"message_id":526,"from":{"id":6869523551,"is_bot":true,"first_name":"\u0412\u0430\u0448\u0438 \u0431\u0430\u043b\u043b\u044b \u0432 \u0411\u0438\u0437\u043d\u0435\u0441 \u0421\u0442\u0438\u043b\u0435","username":"BStilBot"},"chat":{"id":5976605989,"first_name":"2happy","username":"gentuwu","type":"private"},"date":1738247095,"text":"\u041f\u043e\u0434\u0435\u043b\u0438\u0442\u0435\u0441\u044c\u0441\u0432\u043e\u0438\u043c \u0442\u0435\u043b\u0435\u0444\u043e\u043d\u043d\u044b\u043c \u043d\u043e\u043c\u0435\u0440\u043e\u043c, \u0447\u0442\u043e\u0431\u044b\u043c\u044b \u043d\u0430\u0448\u043b\u0438 \u0432\u0430\u0448\u0438 \u0431\u0430\u043b\u043b\u044b"},"contact":{"phone_number":"+79936175103","first_name":"2happy","user_id":5976605989}}}'], 1); */
