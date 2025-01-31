@@ -6,7 +6,6 @@ require_once __DIR__ . '/log.php';
 /* Dotenv\Dotenv::createImmutable(__DIR__)->load(); */
 
 // интеграция https://telegram.org
-use SergiX44\Nutgram\Configuration;
 use SergiX44\Nutgram\Nutgram;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardMarkup;
@@ -14,8 +13,6 @@ use SergiX44\Nutgram\Telegram\Types\Keyboard\KeyboardButton;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardMarkup;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardRemove;
 use SergiX44\Nutgram\RunningMode\Functional;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use bru\api\Client;
 use bru\api\NoCache;
 
@@ -23,7 +20,6 @@ function handler($event, $context)
 {
 	# context - useless, $event - encoded data
 	$text = require __DIR__ . '/texts.php';
-	$logger = new Logger('bstil', [new StreamHandler('php://stdout', Logger::INFO)]);
 
 	$api_key = $_ENV['API_KEY'];
 
@@ -31,9 +27,7 @@ function handler($event, $context)
 		throw new InvalidArgumentException('No api_key');
 	}
 
-	$tg = new Nutgram($api_key, new Configuration(
-		logger: new Logger('tg', [new StreamHandler('php://stdout', Logger::INFO)])
-	));
+	$tg = new Nutgram($api_key);
 
 	$tg->setRunningMode(Functional::class);
 
@@ -45,9 +39,6 @@ function handler($event, $context)
 		sleepy: true
 	);
 
-	$bru->setLogger(new Logger('bru', [new StreamHandler('php://stdout', Logger::INFO)]));
-
-	// получение телефонного номера пользователя с запуском бота
 	$tg->onCommand('start', function (Nutgram $tg) use ($text) {
 		$keyboard = new ReplyKeyboardMarkup(
 			input_field_placeholder: $text['input_field_placeholder']
@@ -66,7 +57,7 @@ function handler($event, $context)
 		);
 	});
 
-	$tg->onContact(function (Nutgram $tg) use ($bru, $logger, $text) {
+	$tg->onContact(function (Nutgram $tg) use ($bru, $text) {
 		$message = $tg->message();
 		$contact = $message->contact;
 
@@ -93,10 +84,6 @@ function handler($event, $context)
 
 		// если нету бонусной карты или баллов
 		if (($cards[0] == null) || ($cards[0]['bonus_sum'] == 0)) {
-			$logger->info(
-				"A wihout points, or new, user sent contacts",
-				["user_id" => $message->from->id, "phone" => $phone]
-			);
 
 			$reply = $tg->sendMessage(
 				text: $text['no-points'],
@@ -120,11 +107,6 @@ function handler($event, $context)
 
 			return;
 		} else {
-			$logger->info(
-				"User with points sent contacts",
-				["user_id" => $message->from->id, "phone" => $phone, "bonus_sum" => $cards[0]['bonus_sum']]
-			);
-
 			$tg->sendMessage(
 				text: sprintf($text['points'], $cards[0]['bonus_sum']),
 				reply_markup: new ReplyKeyboardRemove(true),
