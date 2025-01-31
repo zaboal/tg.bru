@@ -1,0 +1,34 @@
+name: 'Terraform CI/CD'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve
+        env:
+          TF_VAR_yc_token: ${{ secrets.YC_TOKEN }}
+          TF_VAR_yc_cloud_id: ${{ secrets.YC_CLOUD_ID }}
+          TF_VAR_yc_folder_id: ${{ secrets.YC_FOLDER_ID }}
+          TF_VAR_yc_zone: ${{ secrets.YC_ZONE }}
