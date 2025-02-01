@@ -11,8 +11,6 @@
 		}
 	],
 	"require": {
-		"apix/log": "^1.3",
-		"monolog/monolog": "^3.7",
 		"sh1nez/nutgram": "^1.1",
 		"sh1nez/bru": "dev-master"
 	},
