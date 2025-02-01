@@ -1,9 +1,3 @@
-variable "service_account" {
-	description = "service-account"
-	type = string
-	sensitive = true
-}
-
 variable "yandex_token" {
   description = "Yandex Cloud OAuth token"
   type        = string
