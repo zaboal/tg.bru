@@ -1,0 +1,15 @@
+{
+	"minimum-stability": "dev",
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/sh1nez/bru.git"
+		}
+	],
+	"require": {
+		"sh1nez/bru": "dev-master"
+	},
+	"require-dev": {
+		"vlucas/phpdotenv": "^5.6"
+	}
+}
