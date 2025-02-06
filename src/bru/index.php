@@ -59,7 +59,7 @@ function handler($event, $context)
 	$data = json_decode($params['data']);
 	$new = $changes[1]['data']['bonus_sum'];
 	$delta = $new - $changes[0]['data']['bonus_sum'];
-	$text = "Благодарим за покупку!\nНачислено " . $new . " баллов, теперь у Вас " . $delta . " баллов";
+	$text = "Благодарим за покупку!\nНачислено " . $delta . " баллов, теперь у Вас " . $new . " баллов";
 	$id = getChat($data->num);
 	sendMessage($id, $text);
 }

@@ -62,5 +62,35 @@ resource "null_resource" "trigger_webhook" {
 
 output "function_https_url" {
   value = yandex_function.my_function.id
+}
+
+
+data "archive_file" "function_zip2" {
+  type        = "zip"
+  source_dir  = "${path.module}/src/bru"
+  output_path = "${path.module}/archive2.zip"
+}
+
+resource "yandex_function" "my_function2" {
+  name              = "terraform-function2"
+  description       = "For tg2"
+  user_hash         = random_id.user_hash.hex
+  runtime           = "php82"
+  entrypoint        = "index.handler"
+  memory            = 128
+  execution_timeout = 10
+
+  content {
+    zip_filename = data.archive_file.function_zip.output_path
   }
+
+  environment = {
+    API_KEY = var.api_key
+    TOKEN = var.tinybird_token
+  }
+}
+
+output "function_https_url2" {
+  value = yandex_function.my_function2.id
+}
 
