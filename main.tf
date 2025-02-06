@@ -87,10 +87,10 @@ resource "yandex_function" "my_function2" {
   environment = {
     API_KEY = var.api_key
     TOKEN = var.tinybird_token
+    TOKEN2 = var.tinybird_token2
   }
 }
 
 output "function_https_url2" {
   value = yandex_function.my_function2.id
 }
-
