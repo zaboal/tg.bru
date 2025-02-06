@@ -1,8 +1,5 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
-Dotenv\Dotenv::createImmutable(__DIR__)->load();
-
 function log_message($incoming_message): bool
 {
 	$data = json_decode($incoming_message, true);
@@ -66,7 +63,6 @@ function login_user($tg, $number): bool {
 	));
 
 	$response = curl_exec($curl);
-	$err = curl_error($curl);
 	curl_close($curl);
 	$ppp = json_decode($response);
 	return $ppp->successful_rows == 1;
