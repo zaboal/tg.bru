@@ -23,14 +23,14 @@ resource "random_id" "user_hash" {
   byte_length = 16
 }
 
-data "archive_file" "function_zip" {
+data "archive_file" "function_zip1" {
   type        = "zip"
   source_dir  = "${path.module}/src/functional"
   output_path = "${path.module}/archive.zip"
 }
 
-resource "yandex_function" "my_function" {
-  name              = "terraform-function"
+resource "yandex_function" "my_function1" {
+  name              = "terraform-function1"
   description       = "For tg"
   user_hash         = random_id.user_hash.hex
   runtime           = "php82"
@@ -39,7 +39,7 @@ resource "yandex_function" "my_function" {
   execution_timeout = 10
 
   content {
-    zip_filename = data.archive_file.function_zip.output_path
+    zip_filename = data.archive_file.function_zip1.output_path
   }
 
   environment = {
@@ -48,20 +48,24 @@ resource "yandex_function" "my_function" {
     ACCOUNT        = var.account
     SECRET         = var.secret
     APP_ID         = var.app_id
-    TINYBIRD_TOKEN = var.tinybird_token
+    TOKEN		   = var.tinybird_token
+    TOKEN2		   = var.tinybird_token2
   }
 }
 
 resource "null_resource" "trigger_webhook" {
-  depends_on = [yandex_function.my_function]
+  depends_on = [yandex_function.my_function1]
 
   provisioner "local-exec" {
-    command = "curl -X POST \"https://api.telegram.org/bot${var.api_key}/setWebhook?url=https://functions.yandexcloud.net/${yandex_function.my_function.id}\""
+    command = "curl -X POST \"https://api.telegram.org/bot${var.api_key}/setWebhook?url=https://functions.yandexcloud.net/${yandex_function.my_function1.id}\""
   }
 }
 
+resource "null_resource" "trigger_bru" {
+}
+
 output "function_https_url" {
-  value = yandex_function.my_function.id
+  value = yandex_function.my_function1.id
 }
 
 
@@ -81,13 +85,12 @@ resource "yandex_function" "my_function2" {
   execution_timeout = 10
 
   content {
-    zip_filename = data.archive_file.function_zip.output_path
+    zip_filename = data.archive_file.function_zip2.output_path
   }
 
   environment = {
     API_KEY = var.api_key
     TOKEN = var.tinybird_token
-    TOKEN2 = var.tinybird_token2
   }
 }
 
