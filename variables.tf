@@ -51,4 +51,8 @@ variable "tinybird_token" {
   sensitive = true
 }
 
-
+variable "tinybird_token2" {
+  description = "Token для tinybird2"
+  type        = string
+  sensitive = true
+}

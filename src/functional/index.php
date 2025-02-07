@@ -74,7 +74,7 @@ function handler($event, $context)
 			$vicar = false;
 		}
 
-		$adminsString = $_ENV['admins'] ?? '';
+		$adminsString = $_ENV['ADMINS'] ?? '';
 
 		$adminsArray = $adminsString ? explode(',', $adminsString) : [];
 

@@ -1,6 +1,5 @@
 <?php
 
-
 function log_message($incoming_message): bool
 {
 	$data = json_decode($incoming_message, true);
@@ -65,6 +64,7 @@ function login_user($tg, $number): bool
 	));
 
 	$response = curl_exec($curl);
+	echo $response;
 	curl_close($curl);
 	$ppp = json_decode($response);
 	return $ppp->successful_rows == 1;
