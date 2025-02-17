@@ -13,9 +13,9 @@ terraform {
 }
 
 provider "yandex" {
-  token     = var.yandex_token
-  cloud_id  = var.yandex_cloud_id
-  folder_id = var.yandex_folder_id
+  token     = var.yc_token
+  cloud_id  = var.yc_cloud
+  folder_id = var.yc_folder
   zone      = "ru-central1-a"
 }
 
@@ -43,13 +43,13 @@ resource "yandex_function" "my_function1" {
   }
 
   environment = {
-    API_KEY        = var.api_key
-    ADMINS         = var.admins
-    ACCOUNT        = var.account
-    SECRET         = var.secret
-    APP_ID         = var.app_id
-    TOKEN		   = var.tinybird_token
-    TOKEN2		   = var.tinybird_token2
+    API_KEY        = var.tg_token
+    ADMINS         = join(",", var.tg_admins)
+    ACCOUNT        = var.bru_account
+    SECRET         = var.bru_token
+    APP_ID         = var.bru_id
+    TOKEN		   = var.tb_token
+    TOKEN2		   = var.tb_token
   }
 }
 
@@ -57,17 +57,9 @@ resource "null_resource" "trigger_webhook" {
   depends_on = [yandex_function.my_function1]
 
   provisioner "local-exec" {
-    command = "curl -X POST \"https://api.telegram.org/bot${var.api_key}/setWebhook?url=https://functions.yandexcloud.net/${yandex_function.my_function1.id}\""
+    command = "curl -X POST \"https://api.telegram.org/bot${var.tg_token}/setWebhook?url=https://functions.yandexcloud.net/${yandex_function.my_function1.id}\""
   }
 }
-
-resource "null_resource" "trigger_bru" {
-}
-
-output "function_https_url" {
-  value = yandex_function.my_function1.id
-}
-
 
 data "archive_file" "function_zip2" {
   type        = "zip"
@@ -89,11 +81,7 @@ resource "yandex_function" "my_function2" {
   }
 
   environment = {
-    API_KEY = var.api_key
-    TOKEN = var.tinybird_token
+    API_KEY = var.tg_token
+    TOKEN = var.tb_token
   }
-}
-
-output "function_https_url2" {
-  value = yandex_function.my_function2.id
 }
