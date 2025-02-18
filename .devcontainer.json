@@ -1,0 +1,35 @@
+{
+    "name": "PHP & Terraform & zaboal's enchancements",
+    "features": {
+        "ghcr.io/devcontainers/features/php:1": { "version": "8.2" },
+        "ghcr.io/devcontainers-extra/features/composer:1": {},
+        "ghcr.io/devcontainers-extra/features/terraform-asdf:2": {}
+    },
+    "postCreateCommand": "find . -name 'vendor' -prune -o -name 'composer.json' -execdir composer install \\;",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bmewburn.vscode-intelephense-client",
+                "kokororin.vscode-phpfmt",
+                "hashicorp.terraform",
+                "github.copilot",
+                "pkief.material-icon-theme"
+            ],
+            "settings": {
+                "chat.editing.alwaysSaveWithGeneratedChanges": true,
+                "explorer.confirmDragAndDrop": false,
+                "explorer.decorations.badges": true,
+                "explorer.decorations.colors": true,
+                "explorer.excludeGitIgnore": true,
+                "window.commandCenter": false,
+                "workbench.editor.editorActionsLocation": "hidden",
+                "workbench.editor.showTabs": "none",
+                "workbench.iconTheme": "material-icon-theme",
+                "workbench.layoutControl.enabled": false,
+                "workbench.settings.editor": "json",
+                "workbench.sideBar.location": "right",
+                "workbench.statusBar.visible": false
+            }
+        }
+    }
+}
