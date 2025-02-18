@@ -1,4 +1,4 @@
-variable "tb_token" {  
+variable "tinybird_token" {  
   type				= string
   sensitive		= true
   nullable		= false
@@ -8,7 +8,7 @@ variable "tb_token" {
 	EOT
 }
 
-variable "yc_cloud" {
+variable "yandex_cloud_id" {
   type        = string
   sensitive   = false
 	nullable		= false
@@ -18,7 +18,7 @@ variable "yc_cloud" {
 	EOT
 }
 
-variable "yc_folder" {
+variable "yandex_folder_id" {
   type        = string
   sensitive   = false
 	nullable		= false
@@ -28,7 +28,7 @@ variable "yc_folder" {
 	EOT
 }
 
-variable "yc_token" {
+variable "yandex_token" {
   type        = string
   sensitive   = true
 	nullable		= false
@@ -38,8 +38,8 @@ variable "yc_token" {
 	EOT
 }
 
-variable "tg_admins" {
-  type        = list(string)
+variable "telegram_admins_ids" {
+  type        = list(number)
 	sensitive 	= false
 	nullable		= false
 	default 		= ["987595197"]
@@ -49,7 +49,7 @@ variable "tg_admins" {
 	EOT
 }
 
-variable "tg_token" {
+variable "telegram_token" {
   type        = string
   sensitive		= true
 	nullable		= false
@@ -59,7 +59,7 @@ variable "tg_token" {
 	EOT
 }
 
-variable "bru_account" {
+variable "businessru_account_id" {
   type        = string
   sensitive 	= false
   nullable		= false
@@ -69,8 +69,8 @@ variable "bru_account" {
 	EOT
 }
 
-variable "bru_id" {
-	type				= string
+variable "businessru_app_id" {
+	type				= number
   sensitive		= false
   nullable		= false
 	description	= <<-EOT
@@ -79,7 +79,7 @@ variable "bru_id" {
 	EOT
 }
 
-variable "bru_token" {
+variable "businessru_token" {
   type				= string
   sensitive 	= true
 	nullable 		= false 
