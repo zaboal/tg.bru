@@ -35,9 +35,14 @@ Telegram-бот
 <a href="/terraform/variables.tf"><code>/terraform/variables.tf</code></a>.
 Затем разверните сервис: 
 <pre><code>terraform -chdir=terraform apply</code></pre>
-Terraform в виде 
-<a href="//developer.hashicorp.com/terraform/language/values/outputs">вывода</a> 
-даст ссылку на рабочего Telegram-бота.
+Вы получите ссылку на рабочего Telegram-бота.
+</p>
+
+<p>
+Мы используем 
+<a href="//terraform.io">HCP Terraform</a> 
+для автоматизации деплоя.
+Там можно подключаться к чужим репозиториям.
 </p>
 
 <h2 id="license"> Лицензия </h2>
