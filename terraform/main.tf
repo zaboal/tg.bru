@@ -29,7 +29,7 @@ resource "random_id" "user_hash" {
 
 data "archive_file" "telegram_function" {
 	type        = "zip"
-	source_dir  = "${path.module}/../src/functional"
+	source_dir  = "${path.module}/../src/functions/telegram"
 	output_path = "${path.module}/tg.yc-func.zip"
 }
 
@@ -71,7 +71,7 @@ data "curl_request" "telegram_getme" {
 
 data "archive_file" "businessru_function" {
 	type        = "zip"
-	source_dir  = "${path.module}/../src/bru"
+	source_dir  = "${path.module}/../src/functions/businessru"
 	output_path = "${path.module}/bru.yc-func.zip"
 }
 
