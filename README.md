@@ -12,7 +12,7 @@ Telegram-бот на основе PHP, Yandex Cloud + Terraform, и Tinybird, д
 
 <p> На <a href="//github.com/zaboal/tg-bru/commits/main/README.md">момент обновления этого <code>README</code></a> реализовано:
 <ul>
-    <li>получение собственных бонусов по телефону, если будет найдена дисконтная карта с соотвествующим номером;</li>
+    <li>получение собственных бонусов по телефону, если найдётся карта с соотвествующим номером;</li>
     <li>запоминание этого номера, и уведомление об изменениях баланса;</li>
     <li>возможность для администраторов узнать чужое кол-во бонусов.</li>
 </ul>
@@ -22,7 +22,7 @@ Telegram-бот на основе PHP, Yandex Cloud + Terraform, и Tinybird, д
 
 <ol>
     <li>Установите Terraform <a href="https://developer.hashicorp.com/terraform/install">(официальная инструкция)</a>,</li>
-    <li>будьте зарегестрированы во всех указанных в <a href="/terraform/variables.tf"><code>/terraform/variables.tf</code></a> сервисах и заполучите токены,</li>
+    <li>зарегистрируйтесь в указанных в <a href="/terraform/variables.tf"><code>/terraform/variables.tf</code></a> сервисах и заполучите токены,</li>
     <li>разверните сервис: <pre><code>terraform -chdir=terraform apply</code></pre></li>
 </ol>
 
