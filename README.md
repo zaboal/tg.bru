@@ -18,7 +18,7 @@ Telegram-бот на основе PHP, Yandex Cloud + Terraform, и Tinybird, д
 </ul>
 </p>
 
-<h2> Установка </h2>
+<h2 id="install"> Установка </h2>
 
 <ol>
     <li>Установите Terraform <a href="https://developer.hashicorp.com/terraform/install">(официальная инструкция)</a>,</li>
@@ -26,7 +26,7 @@ Telegram-бот на основе PHP, Yandex Cloud + Terraform, и Tinybird, д
     <li>разверните сервис: <pre><code>terraform -chdir=terraform apply</code></pre></li>
 </ol>
 
-<h2> Лицензия </h2>
+<h2 id="license"> Лицензия </h2>
 
 <p>
 Бот лицензирован под <b>AGPL v3</b>, 
