@@ -22,5 +22,5 @@ output "telegram_url" {
 }
 
 output "businessru_app_psw_webhook" {
-    value = nonsensitive(join("", [jsondecode(data.curl_request.businessru_token.response_body).token , var.businessru_app_secret, "url=https://functions.yandexcloud.net/", yandex_function.businessru.id]))
+    value = nonsensitive(join("", [jsondecode(data.curl_request.businessru_token.response_body).token , var.businessru_app_secret, "app_id=", var.businessru_app_id, "&url=https://functions.yandexcloud.net/", yandex_function.businessru.id]))
 }
