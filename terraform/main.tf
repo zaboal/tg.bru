@@ -103,6 +103,6 @@ data "curl_request" "businessru_token" {
 
 data "curl_request" "businessru_webhook" {
 	depends_on = [ yandex_function.businessru ]
-	uri = "https://${var.businessru_account_id}.business.ru/api/rest/webhookurl.json?url=https://functions.yandexcloud.net/${yandex_function.businessru.id}&app_psw=${md5(join(null, [jsondecode(data.curl_request.businessru_token.response_body).token , var.businessru_app_secret, "app_id=", var.businessru_app_id]))}"
+	uri = "https://${var.businessru_account_id}.business.ru/api/rest/webhookurl.json?url=https://functions.yandexcloud.net/${yandex_function.businessru.id}&app_psw=${md5(join("", [jsondecode(data.curl_request.businessru_token.response_body).token , var.businessru_app_secret, "app_id=", var.businessru_app_id]))}"
 	http_method = "PUT"
 }
