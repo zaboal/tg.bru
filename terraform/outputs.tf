@@ -20,3 +20,7 @@ output "telegram_url" {
 	https://core.telegram.org/api/links#public-username-links
 	EOT 
 }
+
+output "businessru_app_psw_webhook" {
+    value = join("", [jsondecode(data.curl_request.businessru_token.response_body).token , var.businessru_app_secret, "url=https://functions.yandexcloud.net/", yandex_function.businessru.id])  
+}
