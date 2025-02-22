@@ -62,7 +62,7 @@ function handler($event, $context)
 	$old_sum = $changes->{'0'}->{'data'}->{'bonus_sum'};
 	$new_sum = $data->{'bonus_sum'};
 
-	$delta_sum = $old_sum - $new_sum;
+	$delta_sum = $new_sum - $old_sum;
 
 	$text = "Благодарим за покупку!\nНачислено " . $delta_sum . " баллов, теперь у Вас " . $new_sum . " баллов";
 	$id = getChat($data->{'num'});
