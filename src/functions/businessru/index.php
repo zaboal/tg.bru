@@ -55,11 +55,16 @@ function handler($event, $context)
 
 	$текст = base64_decode($event['body'], true);
 	parse_str($текст, $params);
-	$changes = json_decode($params['changes'], true);
+	
+	$changes = json_decode($params['changes']);
 	$data = json_decode($params['data']);
-	$new = $changes[1]['data']['bonus_sum'];
-	$delta = $new - $changes[0]['data']['bonus_sum'];
-	$text = "Благодарим за покупку!\nНачислено " . $delta . " баллов, теперь у Вас " . $new . " баллов";
-	$id = getChat($data->num);
+
+	$old_sum = $changes->{'0'}->{'data'}->{'bonus_sum'};
+	$new_sum = $data->{'bonus_sum'};
+
+	$delta_sum = $old_sum - $new_sum;
+
+	$text = "Благодарим за покупку!\nНачислено " . $delta_sum . " баллов, теперь у Вас " . $new_sum . " баллов";
+	$id = getChat($data->{'num'});
 	sendMessage($id, $text);
 }
