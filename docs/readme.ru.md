@@ -2,6 +2,7 @@
 
 <a href="//t.me/bru_tg"><img src="https://img.shields.io/badge/группа-поддержка-FFFFFF?style=flat-square&logo=telegram&logoColor=white" alt="Группа в Telegram"/></a>
 <a href="//t.me/bstilbot"><img src="https://img.shields.io/badge/бот-рабочий_пример-FFFFFF?style=flat-square&logo=telegram&logoColor=white" alt="Группа в Telegram"/></a>
+<a href='https://codespaces.new/zaboal/tg-bru?quickstart=1'><img src="https://img.shields.io/badge/кодспейс-начать_разработку-FFFFFF?style=flat-square&logo=github&logoColor=white" alt="Группа в Telegram"/></a>
 
 <p> 
 Telegram-бот 
