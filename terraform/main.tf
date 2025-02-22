@@ -33,20 +33,27 @@ data "archive_file" "telegram_function" {
   output_path = "${path.module}/tg.yc-func.zip"
 }
 
-resource "yandex_function" "telegram" {
-  depends_on        = [data.archive_file.telegram_function]
-  name              = "telegram"
-  description       = "Вебхук для Telegram-бота"
-  user_hash         = random_id.user_hash.hex
-  runtime           = "php82"
-  entrypoint        = "index.handler"
-  memory            = 128
-  execution_timeout = 10
+module "telegram_function" {
+  source = "github.com/terraform-yc-modules/terraform-yc-function.git"
 
-  content {
-    zip_filename = data.archive_file.telegram_function.output_path
-  }
-
+  yc_function_name = "telegram"
+  yc_function_description = "Вебхук для Telegram-бота"
+  
+  zip_filename = data.archive_file.telegram_function.output_path
+  runtime = "php82"
+  entrypoint = "index.handler"
+  
+  lockbox_secret_value = null
+  lockbox_secret_key = null
+  
+  choosing_trigger_type = "message_queue"
+  
+  scaling_policy = [{
+    tag = null
+    zone_instances_limit = null
+    zone_requests_limit = null
+  }]
+  
   environment = {
     API_KEY = var.telegram_token
     ADMINS  = join(",", var.telegram_admins_ids)
@@ -55,16 +62,17 @@ resource "yandex_function" "telegram" {
     APP_ID  = var.businessru_app_id
     TOKEN   = var.tinybird_token
     TOKEN2  = var.tinybird_token
-  }
+  }  
 }
 
 data "curl_request" "telegram_webhook" {
-  depends_on  = [yandex_function.telegram]
+  depends_on  = [ telegram_function ]
   uri         = "https://api.telegram.org/bot${var.telegram_token}/setWebhook?url=https://functions.yandexcloud.net/${yandex_function.telegram.id}"
   http_method = "POST"
 }
 
 data "curl_request" "telegram_getme" {
+  depends_on  = [ telegram_function ]
   uri         = "https://api.telegram.org/bot${var.telegram_token}/getMe"
   http_method = "GET"
 }
