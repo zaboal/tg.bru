@@ -51,14 +51,14 @@ resource "yandex_function" "telegram" {
 		API_KEY	= var.telegram_token
 		ADMINS	= join(",", var.telegram_admins_ids)
 		ACCOUNT	= var.businessru_account_id
-		SECRET	= var.businessru_token
+		SECRET	= var.businessru_app_secret
 		APP_ID	= var.businessru_app_id
-		TOKEN		= var.tinybird_token
+		TOKEN	= var.tinybird_token
 		TOKEN2	= var.tinybird_token
 	}
 }
 
-data "curl_request" "telegram_setup_webhook" {
+data "curl_request" "telegram_webhook" {
 	depends_on = [ yandex_function.telegram ]
 	uri = "https://api.telegram.org/bot${var.telegram_token}/setWebhook?url=https://functions.yandexcloud.net/${yandex_function.telegram.id}"
 	http_method = "POST"
@@ -91,6 +91,18 @@ resource "yandex_function" "businessru" {
 
 	environment = {
 		API_KEY = var.telegram_token
-		TOKEN = var.tinybird_token
+		TOKEN   = var.tinybird_token
 	}
+}
+
+data "curl_request" "businessru_token" {
+	depends_on = [ yandex_function.businessru ]
+	uri = "https://${var.businessru_account_id}.business.ru/api/rest/repair.json?app_id=${var.businessru_app_id}&app_psw=${md5(join(null, [var.businessru_app_secret, "app_id=", var.businessru_app_id]))}"
+	http_method = "GET"
+}
+
+data "curl_request" "businessru_webhook" {
+	depends_on = [ yandex_function.businessru ]
+	uri = "https://${var.businessru_account_id}.business.ru/api/rest/webhookurl.json?url=https://functions.yandexcloud.net/${yandex_function.businessru.id}&app_psw=${md5(join(null, [jsondecode(data.curl_request.businessru_token.response_body).token , var.businessru_app_secret, "app_id=", var.businessru_app_id]))}"
+	http_method = "PUT"
 }

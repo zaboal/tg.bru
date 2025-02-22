@@ -79,7 +79,7 @@ variable "businessru_app_id" {
 	EOT
 }
 
-variable "businessru_token" {
+variable "businessru_app_secret" {
   type				= string
   sensitive 	= true
 	nullable 		= false 
