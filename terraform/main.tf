@@ -97,7 +97,7 @@ resource "yandex_function" "businessru" {
 
 data "curl_request" "businessru_token" {
 	depends_on = [ yandex_function.businessru ]
-	uri = "https://${var.businessru_account_id}.business.ru/api/rest/repair.json?app_id=${var.businessru_app_id}&app_psw=${md5(join(null, [var.businessru_app_secret, "app_id=", var.businessru_app_id]))}"
+	uri = "https://${var.businessru_account_id}.business.ru/api/rest/repair.json?app_id=${var.businessru_app_id}&app_psw=${md5(join("", [var.businessru_app_secret, "app_id=", var.businessru_app_id]))}"
 	http_method = "GET"
 }
 
