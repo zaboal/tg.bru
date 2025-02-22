@@ -9,7 +9,7 @@ data "archive_file" "telegram_function" {
 }
 
 module "telegram_function" {
-  source = "github.com/terraform-yc-modules/terraform-yc-function.git"
+  source = "github.com/zaboal/tf-yc.git"
 
   yc_function_name = "telegram"
   yc_function_description = "Вебхук для Telegram-бота"
