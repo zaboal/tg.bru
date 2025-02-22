@@ -67,7 +67,7 @@ module "telegram_function" {
 
 data "curl_request" "telegram_webhook" {
   depends_on  = [ telegram_function ]
-  uri         = "https://api.telegram.org/bot${var.telegram_token}/setWebhook?url=https://functions.yandexcloud.net/${yandex_function.telegram.id}"
+  uri         = "https://api.telegram.org/bot${var.telegram_token}/setWebhook?url=https://functions.yandexcloud.net/${telegram_function.function_id}"
   http_method = "POST"
 }
 
