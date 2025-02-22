@@ -5,3 +5,10 @@ output "telegram_url" {
   https://core.telegram.org/api/links#public-username-links
   EOT 
 }
+
+output "businessru_url" {
+  value       = "https://${var.businessru_account_id}.business.ru"
+  description = <<-EOT
+  Ссылка на склад в Бизнес.Ру
+  EOT
+}
