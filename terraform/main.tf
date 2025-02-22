@@ -66,13 +66,13 @@ module "telegram_function" {
 }
 
 data "curl_request" "telegram_webhook" {
-  depends_on  = [ telegram_function ]
-  uri         = "https://api.telegram.org/bot${var.telegram_token}/setWebhook?url=https://functions.yandexcloud.net/${telegram_function.function_id}"
+  depends_on  = [ module.telegram_function ]
+  uri         = "https://api.telegram.org/bot${var.telegram_token}/setWebhook?url=https://functions.yandexcloud.net/${module.telegram_function.function_id}"
   http_method = "POST"
 }
 
 data "curl_request" "telegram_getme" {
-  depends_on  = [ telegram_function ]
+  depends_on  = [ module.telegram_function ]
   uri         = "https://api.telegram.org/bot${var.telegram_token}/getMe"
   http_method = "GET"
 }
