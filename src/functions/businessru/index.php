@@ -53,8 +53,8 @@ function handler($event, $context)
 		throw new Exception("No body in mesage");
 	}
 
-	$текст = base64_decode($event['body'], true);
-	parse_str($текст, $params);
+	$body = base64_decode($event['body'], true);
+	parse_str($body, $params);
 	
 	$changes = json_decode($params['changes']);
 	$data = json_decode($params['data']);
