@@ -1,20 +1,14 @@
-resource "random_id" "user_hash" {
-  byte_length = 16
-}
-
-data "archive_file" "telegram_function" {
-  type        = "zip"
-  source_dir  = "${path.module}/../src/functions/telegram"
-  output_path = "${path.module}/tg.yc-func.zip"
+resource "random_pet" "id" {
+  length = 2
 }
 
 module "telegram_function" {
-  source = "github.com/zaboal/tf-yc.git"
+  source = "github.com/zaboal/tf-yc.git?ref=adopt-terraform-aws-lambda"
 
-  yc_function_name = "telegram"
-  yc_function_description = "Вебхук для Telegram-бота"
+  name = "telegram"
+  description = "Вебхук для Telegram-бота"
   
-  zip_filename = data.archive_file.telegram_function.output_path
+  source_path = "${path.module}/../src/functions/telegram"
   runtime = "php82"
   entrypoint = "index.handler"
   
@@ -62,7 +56,7 @@ resource "yandex_function" "businessru" {
   depends_on        = [data.archive_file.businessru_function]
   name              = "businessru"
   description       = "Вебхук для Бизнес.Ру"
-  user_hash         = random_id.user_hash.hex
+  user_hash         = random_pet.id
   runtime           = "php82"
   entrypoint        = "index.handler"
   memory            = 128
