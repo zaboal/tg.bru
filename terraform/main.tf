@@ -54,9 +54,10 @@ data "archive_file" "businessru_function" {
 
 resource "yandex_function" "businessru" {
   depends_on        = [data.archive_file.businessru_function]
+
   name              = "businessru"
   description       = "Вебхук для Бизнес.Ру"
-  user_hash         = random_pet.id
+  user_hash         = tostring(random_pet.id)
   runtime           = "php82"
   entrypoint        = "index.handler"
   memory            = 128
