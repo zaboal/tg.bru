@@ -1,4 +1,4 @@
-resource "random_pet" "id" {
+resource "random_pet" "deployment" {
   length = 2
 }
 
@@ -57,7 +57,7 @@ resource "yandex_function" "businessru" {
 
   name              = "businessru"
   description       = "Вебхук для Бизнес.Ру"
-  user_hash         = tostring(random_pet.id)
+  user_hash         = random_pet.deployment.id
   runtime           = "php82"
   entrypoint        = "index.handler"
   memory            = 128
