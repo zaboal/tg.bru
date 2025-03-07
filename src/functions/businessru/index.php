@@ -19,14 +19,20 @@ function sendMessage($chat, $text)
 	curl_close($ch);
 }
 
-function getChat($number)
+function getChat($phone)
 {
-	$url = 'https://api.us-east.aws.tinybird.co/v0/pipes/untitled_pipe_7865.json';
-	$params = ['num' => $number];
+	$phone = substr($phone, strlen($phone) - 10);
 	$token = $_ENV['TOKEN'];
+
+	$url = 'https://api.us-east.aws.tinybird.co/v0/pipes/telegram_contacts.json';
+	$params = ['q' => "SELECT id FROM _ WHERE phone == '" . $phone . "'"];
+	$url = $url . '?' . http_build_query($params);
+
+	echo $url;
+
 	$ch = curl_init();
 	curl_setopt_array($ch, [
-		CURLOPT_URL => $url . '?' . http_build_query($params),
+		CURLOPT_URL => $url,
 		CURLOPT_HTTPHEADER => [
 			'Authorization: Bearer ' . $token,
 			'Accept-Encoding: gzip'
@@ -38,12 +44,16 @@ function getChat($number)
 
 	$response = curl_exec($ch);
 
+	echo $response;
+
 	$response = json_decode(gzdecode($response));
 	curl_close($ch);
-	if (! $response->data[0]->tg) {
+
+	if (! $response->data[0]) {
 		return false;
 	}
-	return (int)$response->data[0]->tg;
+	
+	return (int)$response->data[0]->id;
 }
 
 function handler($event, $context)
@@ -51,14 +61,14 @@ function handler($event, $context)
 	$text = require __DIR__ . '/texts.php';
 
 	if (!isset($event['body'])) {
-		throw new Exception("Missing required 'body' parameter in request");
+		exit("Missing required 'body' parameter in request");
 	}
 
 	$body = base64_decode($event['body'], true);
 	parse_str($body, $params);
 
 	if (!isset($params['model']) || $params['model'] !== 'discountcards') {
-		throw new Exception("Parameter 'model' must be 'discountcards'");
+		exit("Parameter 'model' must be 'discountcards'");
 	}
 	
 	$changes = json_decode($params['changes']);
@@ -70,10 +80,20 @@ function handler($event, $context)
 
 	if ($delta_sum < 0) {
 		$text = sprintf($text['decrease'], abs($delta_sum), $new_sum);
-	} else {
+	} elseif ($delta_sum > 0) {
 		$text = sprintf($text['increase'], abs($delta_sum), $new_sum);
+	} else {
+		exit("No changes in bonus sum");
 	}
 
 	$id = getChat($data->{'num'});
 	sendMessage($id, $text);
+
+	return [
+		'statusCode' => 200,
+		'body' => json_encode([
+			'status' => 'success',
+			'message' => 'Notification sent successfully'
+		])
+	];
 }
