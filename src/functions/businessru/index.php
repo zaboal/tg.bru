@@ -21,9 +21,10 @@ function sendMessage($chat, $text)
 
 function getChat($number)
 {
-	$url = 'https://api.us-east.aws.tinybird.co/v0/pipes/untitled_pipe_7865.json';
-	$params = ['num' => $number];
+	$url = 'https://api.us-east.aws.tinybird.co/v0/pipes/telegram_contacts.json';
+	$params = ['q' => "SELECT id FROM _ WHERE phone = '" . $number . "'"];
 	$token = $_ENV['TOKEN'];
+
 	$ch = curl_init();
 	curl_setopt_array($ch, [
 		CURLOPT_URL => $url . '?' . http_build_query($params),
@@ -37,13 +38,14 @@ function getChat($number)
 	]);
 
 	$response = curl_exec($ch);
-
 	$response = json_decode(gzdecode($response));
 	curl_close($ch);
-	if (! $response->data[0]->tg) {
+
+	if (! $response->data[0]) {
 		return false;
 	}
-	return (int)$response->data[0]->tg;
+	
+	return (int)$response->data[0]->phone;
 }
 
 function handler($event, $context)
@@ -70,8 +72,10 @@ function handler($event, $context)
 
 	if ($delta_sum < 0) {
 		$text = sprintf($text['decrease'], abs($delta_sum), $new_sum);
-	} else {
+	} elseif ($delta_sum > 0) {
 		$text = sprintf($text['increase'], abs($delta_sum), $new_sum);
+	} else {
+		exit("No changes in bonus sum");
 	}
 
 	$id = getChat($data->{'num'});

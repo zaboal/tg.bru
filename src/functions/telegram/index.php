@@ -63,8 +63,6 @@ function handler($event, $context)
 		$phone = $contact->phone_number;
 		$phone = substr($phone, strlen($phone) - 10); # оставить последние десять цифр номера, т.е. без +7
 
-		login_user($message->from->id, $phone); // create user in database to send webhook from bru
-
 		$cards = $bru->request('get', 'discountcards', ['num' => $phone])['result'];
 
 		// если телефонный номер не пренадлежит пользователю
