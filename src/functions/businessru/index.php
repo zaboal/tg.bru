@@ -66,12 +66,12 @@ function handler($event, $context)
 
 	$old_sum = $changes->{'0'}->{'data'}->{'bonus_sum'};
 	$new_sum = $data->{'bonus_sum'};
-	$delta_sum = abs($new_sum - $old_sum);
+	$delta_sum = $new_sum - $old_sum;
 
 	if ($delta_sum < 0) {
-		$text = sprintf($text['decrease'], $delta_sum, $new_sum);
+		$text = sprintf($text['decrease'], abs($delta_sum), $new_sum);
 	} else {
-		$text = sprintf($text['increase'], $delta_sum, $new_sum);
+		$text = sprintf($text['increase'], abs($delta_sum), $new_sum);
 	}
 
 	$id = getChat($data->{'num'});
