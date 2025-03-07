@@ -1,7 +1,6 @@
 {
     "name": "PHP & Terraform & zaboal's enchancements",
     "features": {
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
         "ghcr.io/devcontainers/features/php:1": { "version": "8.2" },
         "ghcr.io/devcontainers-extra/features/composer:1": {},
         "ghcr.io/devcontainers-extra/features/terraform-asdf:2": {},
