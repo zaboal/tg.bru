@@ -42,6 +42,9 @@ function getChat($number)
 	]);
 
 	$response = curl_exec($ch);
+
+	echo $response;
+
 	$response = json_decode(gzdecode($response));
 	curl_close($ch);
 
@@ -49,7 +52,7 @@ function getChat($number)
 		return false;
 	}
 	
-	return (int)$response->data[0]->phone;
+	return (int)$response->data[0]->id;
 }
 
 function handler($event, $context)
