@@ -24,7 +24,7 @@ function getChat($number)
 	$token = $_ENV['TOKEN'];
 
 	$url = 'https://api.us-east.aws.tinybird.co/v0/pipes/telegram_contacts.json';
-	$params = ['q' => "SELECT id FROM _ WHERE phone = '" . $number . "'"];
+	$params = ['q' => "SELECT id FROM _ WHERE phone == '" . $number . "'"];
 	$url = $url . '?' . http_build_query($params);
 
 	echo $url;
