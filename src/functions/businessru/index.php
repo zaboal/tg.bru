@@ -19,12 +19,13 @@ function sendMessage($chat, $text)
 	curl_close($ch);
 }
 
-function getChat($number)
+function getChat($phone)
 {
+	$phone = substr($phone, strlen($phone) - 10);
 	$token = $_ENV['TOKEN'];
 
 	$url = 'https://api.us-east.aws.tinybird.co/v0/pipes/telegram_contacts.json';
-	$params = ['q' => "SELECT id FROM _ WHERE phone == '" . $number . "'"];
+	$params = ['q' => "SELECT id FROM _ WHERE phone == '" . $phone . "'"];
 	$url = $url . '?' . http_build_query($params);
 
 	echo $url;
