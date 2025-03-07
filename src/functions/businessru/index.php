@@ -48,6 +48,8 @@ function getChat($number)
 
 function handler($event, $context)
 {
+	$text = require __DIR__ . '/texts.php';
+
 	if (!isset($event['body'])) {
 		throw new Exception("Missing required 'body' parameter in request");
 	}
@@ -64,10 +66,14 @@ function handler($event, $context)
 
 	$old_sum = $changes->{'0'}->{'data'}->{'bonus_sum'};
 	$new_sum = $data->{'bonus_sum'};
+	$delta_sum = abs($new_sum - $old_sum);
 
-	$delta_sum = $new_sum - $old_sum;
+	if ($delta_sum < 0) {
+		$text = sprintf($text['decrease'], $delta_sum, $new_sum);
+	} else {
+		$text = sprintf($text['increase'], $delta_sum, $new_sum);
+	}
 
-	$text = "Благодарим за покупку!\nНачислено " . $delta_sum . " баллов, теперь у Вас " . $new_sum . " баллов";
 	$id = getChat($data->{'num'});
 	sendMessage($id, $text);
 }
