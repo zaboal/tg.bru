@@ -23,10 +23,6 @@ provider "yandex" {
   zone      = "ru-central1-a"
 }
 
-resource "random_id" "user_hash" {
-  byte_length = 16
-}
-
 data "archive_file" "telegram_function" {
   type        = "zip"
   source_dir  = "${path.module}/../src/functions/telegram"
@@ -37,7 +33,7 @@ resource "yandex_function" "telegram" {
   depends_on        = [data.archive_file.telegram_function]
   name              = "telegram"
   description       = "Вебхук для Telegram-бота"
-  user_hash         = random_id.user_hash.hex
+  user_hash         = filebase64sha256(data.archive_file.telegram_function.output_path)
   runtime           = "php82"
   entrypoint        = "index.handler"
   memory            = 128
@@ -79,7 +75,7 @@ resource "yandex_function" "businessru" {
   depends_on        = [data.archive_file.businessru_function]
   name              = "businessru"
   description       = "Вебхук для Бизнес.Ру"
-  user_hash         = random_id.user_hash.hex
+  user_hash         = filebase64sha256(data.archive_file.businessru_function.output_path)
   runtime           = "php82"
   entrypoint        = "index.handler"
   memory            = 128
