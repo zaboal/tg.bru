@@ -48,13 +48,16 @@ function getChat($number)
 
 function handler($event, $context)
 {
-	# context - useless, $event - encoded data
-	if (! $event['body']) {
-		throw new Exception("No body in mesage");
+	if (!isset($event['body'])) {
+		throw new Exception("Missing required 'body' parameter in request");
 	}
 
 	$body = base64_decode($event['body'], true);
 	parse_str($body, $params);
+
+	if (!isset($params['model']) || $params['model'] !== 'discountcards') {
+		throw new Exception("Parameter 'model' must be 'discountcards'");
+	}
 	
 	$changes = json_decode($params['changes']);
 	$data = json_decode($params['data']);
