@@ -5,7 +5,7 @@
         "ghcr.io/devcontainers/features/php:1": { "version": "8.2" },
         "ghcr.io/devcontainers-extra/features/composer:1": {},
         "ghcr.io/devcontainers-extra/features/terraform-asdf:2": {},
-        "ghcr.io/zaboal/features/yc:latest": {}
+        "ghcr.io/zaboal/dc/yc:latest": {}
     },
     "postCreateCommand": "find . -name 'vendor' -prune -o -name 'composer.json' -execdir composer install \\;",
     "customizations": {
