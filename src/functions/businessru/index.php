@@ -48,23 +48,32 @@ function getChat($number)
 
 function handler($event, $context)
 {
-	# context - useless, $event - encoded data
-	if (! $event['body']) {
-		throw new Exception("No body in mesage");
+	$text = require __DIR__ . '/texts.php';
+
+	if (!isset($event['body'])) {
+		throw new Exception("Missing required 'body' parameter in request");
 	}
 
 	$body = base64_decode($event['body'], true);
 	parse_str($body, $params);
+
+	if (!isset($params['model']) || $params['model'] !== 'discountcards') {
+		throw new Exception("Parameter 'model' must be 'discountcards'");
+	}
 	
 	$changes = json_decode($params['changes']);
 	$data = json_decode($params['data']);
 
 	$old_sum = $changes->{'0'}->{'data'}->{'bonus_sum'};
 	$new_sum = $data->{'bonus_sum'};
-
 	$delta_sum = $new_sum - $old_sum;
 
-	$text = "Благодарим за покупку!\nНачислено " . $delta_sum . " баллов, теперь у Вас " . $new_sum . " баллов";
+	if ($delta_sum < 0) {
+		$text = sprintf($text['decrease'], abs($delta_sum), $new_sum);
+	} else {
+		$text = sprintf($text['increase'], abs($delta_sum), $new_sum);
+	}
+
 	$id = getChat($data->{'num'});
 	sendMessage($id, $text);
 }
