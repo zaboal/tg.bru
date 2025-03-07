@@ -51,14 +51,14 @@ function handler($event, $context)
 	$text = require __DIR__ . '/texts.php';
 
 	if (!isset($event['body'])) {
-		throw new Exception("Missing required 'body' parameter in request");
+		exit("Missing required 'body' parameter in request");
 	}
 
 	$body = base64_decode($event['body'], true);
 	parse_str($body, $params);
 
 	if (!isset($params['model']) || $params['model'] !== 'discountcards') {
-		throw new Exception("Parameter 'model' must be 'discountcards'");
+		exit("Parameter 'model' must be 'discountcards'");
 	}
 	
 	$changes = json_decode($params['changes']);
@@ -76,4 +76,12 @@ function handler($event, $context)
 
 	$id = getChat($data->{'num'});
 	sendMessage($id, $text);
+
+	return [
+		'statusCode' => 200,
+		'body' => json_encode([
+			'status' => 'success',
+			'message' => 'Notification sent successfully'
+		])
+	];
 }
