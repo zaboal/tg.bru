@@ -21,13 +21,17 @@ function sendMessage($chat, $text)
 
 function getChat($number)
 {
+	$token = $_ENV['TOKEN'];
+
 	$url = 'https://api.us-east.aws.tinybird.co/v0/pipes/telegram_contacts.json';
 	$params = ['q' => "SELECT id FROM _ WHERE phone = '" . $number . "'"];
-	$token = $_ENV['TOKEN'];
+	$url = $url . '?' . http_build_query($params);
+
+	echo $url;
 
 	$ch = curl_init();
 	curl_setopt_array($ch, [
-		CURLOPT_URL => $url . '?' . http_build_query($params),
+		CURLOPT_URL => $url,
 		CURLOPT_HTTPHEADER => [
 			'Authorization: Bearer ' . $token,
 			'Accept-Encoding: gzip'
