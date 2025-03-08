@@ -15,9 +15,9 @@ class TinybirdClient
 		print(json_encode([
 			'level' => 'DEBUG',
 			'message' => 'Initialized Tinybird client',
+			'stream_name' => __CLASS__,
 			'context' => [
 				'frame' => [
-					'class' => __CLASS__,
 					'function' => __FUNCTION__,
 					'line' => __LINE__],
 				'args' => [
@@ -50,9 +50,9 @@ class TinybirdClient
 		print(json_encode([
 			'level' => 'DEBUG',
 			'message' => 'Formed a query for the request',
+			'stream_name' => __CLASS__,
 			'context' => [
 				'frame' => [
-					'class' => __CLASS__,
 					'function' => __FUNCTION__,
 					'line' => __LINE__],
 				'args' => [
@@ -87,9 +87,9 @@ class TinybirdClient
 		print(json_encode([
 			'level' => 'DEBUG',
 			'message' => 'Sent the request and received a response',
+			'stream_name' => __CLASS__,
 			'context' => [
 				'frame' => [
-					'class' => __CLASS__,
 					'function' => __FUNCTION__,
 					'line' => __LINE__ ],
 				'args' => [

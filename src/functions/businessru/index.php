@@ -71,6 +71,20 @@ function handler($event = null, $context = null)
 		'context' => ['old_sum' => $old_sum, 'new_sum' => $new_sum]
 	]));
 
+	print(json_encode([
+		'level' => 'DEBUG',
+		'message' => 'Processed the bonus sum changes',
+		'stream_name' => __CLASS__,
+		'context' => [
+			'args' => [
+				'old_sum' => $old_sum, 
+				'new_sum' => $new_sum, 
+				'sum_change' => $sum_change],
+			'frame' => [
+				'function' => __FUNCTION__,
+				'line' => __LINE__]
+	]]) . PHP_EOL);
+
 	/* --------------------- Send a notification to the user -------------------- */
 
 	$message = $telegram->sendMessage(
