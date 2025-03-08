@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/log.php';
+require_once __DIR__ . '/vendor/autoload.php'; 
+require_once __DIR__ . '/strings.php';
 
 use SergiX44\Nutgram\Nutgram;
 use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
@@ -16,7 +16,6 @@ use SergiX44\Nutgram\RunningMode\Webhook;
 
 function handler($event, $context)
 {
-	static $strings = require __DIR__ . '/strings.php';
 	static $tinybird = new TinybirdClient($_ENV['TINYBIRD_TOKEN']);
 	static $telegram = new Nutgram($_ENV['API_KEY']);
 	static $bru = new Client(
