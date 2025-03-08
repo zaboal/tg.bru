@@ -1,5 +1,6 @@
 {
     "require": {
-        "nutgram/nutgram": "^4.35"
+        "nutgram/nutgram": "^4.35",
+        "fuko-php/masked": "^1.1"
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use Fuko\Masked\Redact;
+
 class TinybirdClient
 {
 	private $token;
@@ -9,6 +11,14 @@ class TinybirdClient
 	{
 		$this->token = $token;
 		$this->baseUrl = rtrim($baseUrl, '/');
+
+		print(json_encode([
+			'level' => 'DEBUG',
+			'message' => 'Initialized Tinybird client',
+			'context' => [
+				'token' => Redact::disguise($token),
+				'baseUrl' => $baseUrl
+		]]) . PHP_EOL);
 	}
 
     /**
@@ -31,6 +41,15 @@ class TinybirdClient
         if (!empty($params)) {
             $queryParams = array_merge($queryParams, $params);
         }
+
+		print(json_encode([
+			'level' => 'DEBUG',
+			'message' => 'Formed a query for the request',
+			'context' => [
+				'class' => get_class($this),
+				'url' => $url,
+				'query_params' => $queryParams
+		]]) . PHP_EOL);
         
         return $this->sendRequest($url, $queryParams);
     }
@@ -55,6 +74,14 @@ class TinybirdClient
 
 		$response = curl_exec($ch);
 		curl_close($ch);
+
+		print(json_encode([
+			'level' => 'DEBUG',
+			'message' => 'Sent the request and received a response',
+			'context' => [
+				'class' => get_class($this),
+				'response' => $response
+		]]) . PHP_EOL);
 
 		return json_decode(gzdecode($response));
 	}
