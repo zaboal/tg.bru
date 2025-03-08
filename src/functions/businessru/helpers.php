@@ -105,7 +105,7 @@ class TinybirdClient
 					'headers' => curl_getinfo($ch)]
 		]]) . PHP_EOL);
 
-		$response = gzdecode(curl_exec($ch));
+		$response = json_decode(gzdecode(curl_exec($ch)));
 		curl_close($ch);
 
 		print(json_encode([
@@ -120,6 +120,6 @@ class TinybirdClient
 					'response' => $response]
 		]]) . PHP_EOL);
 
-		return json_decode($response);
+		return $response;
 	}
 }
