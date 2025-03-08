@@ -6,24 +6,21 @@ class TinybirdClient
 {
 	private $token;
 	private $baseUrl;
+	private $logger;
 
-	public function __construct($token, $baseUrl = 'https://api.tinybird.co/v0')
+	public function __construct(
+		string $token, 
+		?string $baseUrl = 'https://api.tinybird.co/v0', 
+		?YandexFunctionsLogger $logger = null)
 	{
 		$this->token = $token;
 		$this->baseUrl = rtrim($baseUrl, '/');
+		$this->logger = $logger ?? new YandexFunctionsLogger(__CLASS__);
 
-		print(json_encode([
-			'level' => 'DEBUG',
-			'message' => 'Initialized Tinybird client',
-			'stream_name' => __CLASS__,
-			'context' => [
-				'frame' => [
-					'function' => __FUNCTION__,
-					'line' => __LINE__],
-				'values' => [
-					'token' => Redact::disguise($token),
-					'base_url' => $baseUrl ]
-		]]) . PHP_EOL);
+		$this->logger->debug('Initialized Tinybird client', [
+			'token' => Redact::disguise($token),
+			'base_url' => $baseUrl
+		]);
 	}
 
     /**
@@ -47,21 +44,13 @@ class TinybirdClient
             $queryParams = array_merge($queryParams, $params);
         }
 
-		print(json_encode([
-			'level' => 'DEBUG',
-			'message' => 'Formed a query for the request',
-			'stream_name' => __CLASS__,
-			'context' => [
-				'frame' => [
-					'function' => __FUNCTION__,
-					'line' => __LINE__],
-				'values' => [
-					'url' => $url,
-					'query_params' => $queryParams]
-		]]) . PHP_EOL);
-        
-        return $this->sendRequest($url, $queryParams);
-    }
+		$this->logger->debug('Formed a query for the request', [
+			'url' => $url,
+			'query_params' => $queryParams
+		]);
+		
+		return $this->sendRequest($url, $queryParams);
+	}
 
 	private function sendRequest($url, $params = [])
 	{
@@ -69,17 +58,9 @@ class TinybirdClient
 			$url = $url . '?' . http_build_query($params);
 		}
 
-		print(json_encode([
-			'level' => 'DEBUG',
-			'message' => 'Formed the URL with query parameters',
-			'stream_name' => __CLASS__,
-			'context' => [
-				'frame' => [
-					'function' => __FUNCTION__,
-					'line' => __LINE__],
-				'values' => [
-					'url' => $url]
-		]]) . PHP_EOL);
+		$this->logger->debug('Formed the URL with query parameters', [
+			'url' => $url
+		]);
 
 		$ch = curl_init();
 		curl_setopt_array($ch, [
@@ -93,35 +74,73 @@ class TinybirdClient
 			CURLOPT_TIMEOUT => 30
 		]);
 
-		print(json_encode([
-			'level' => 'DEBUG',
-			'message' => 'Initialized a cURL session',
-			'stream_name' => __CLASS__,
-			'context' => [
-				'frame' => [
-					'function' => __FUNCTION__,
-					'line' => __LINE__],
-				'values' => [
-					'headers' => curl_getinfo($ch)]
-		]]) . PHP_EOL);
+		$this->logger->debug('Initialized a cURL session', [
+			'headers' => curl_getinfo($ch)
+		]);
 
-		$response = json_decode(gzdecode(curl_exec($ch)));
+		$data = json_decode(gzdecode(curl_exec($ch)))->data;
 		curl_close($ch);
 
-		print(json_encode([
-			'level' => $response->data == [] ? 
-				'WARN' : 'DEBUG',
-			'message' => $response->data == [] ? 
-				'Requested and received an empty response' : 'Request and received a response',
-			'stream_name' => __CLASS__,
-			'context' => [
-				'frame' => [
-					'function' => __FUNCTION__,
-					'line' => __LINE__ ],
-				'values' => [
-					'response' => $response]
-		]]) . PHP_EOL);
+		$data[0] == null ? $this->logger->warn('Received an empty response', [
+			'response' => $data
+		]) : $this->logger->debug('Received and decoded the response', [
+			'response' => $data
+		]);
 
-		return $response;
+		return $data;
+	}
+}
+
+class YandexFunctionsLogger {
+	private $stream_name;
+
+	public function __construct(?string $stream_name)
+	{
+		$this->stream_name = $stream_name ?? debug_backtrace()[0]['class'];
+	}
+
+	/**
+	 * Log with a given level and message.
+	 * 
+	 * @param string $level The log level (`DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`)
+	 * @param string $message The message to log without any formatting
+	 * @param array|null $values Will be passed as `values` isnide the `context` key
+	 */
+	private function log(string $level, string $message, ?array $values = []): void {
+		$trace = debug_backtrace()[1];
+
+		print(json_encode([
+			'level' => $level,
+			'message' => $message,
+			'stream_name' => $this->stream_name,
+			'context' => [
+				'trace' => $trace,
+				'values' => $values]
+		]) . PHP_EOL);
+	}
+
+	/**
+	 * Log an debugging message.
+	 * 
+	 * @param string $message
+	 * @param array|null $values
+	 */
+	public function debug(string $message, ?array $values = []): void {
+		$this->log('DEBUG', $message, $values);
+	}
+
+	public function warn(string $message, ?array $values = []): void {
+		$this->log('WARN', $message, $values);
+	}
+
+	/**
+	 * Log a fatal error and exit the script.
+	 * 
+	 * @param string $message
+	 * @param array|null $values
+	 */
+	public function fatal(string $message, ?array $values = []): void {
+		$this->log('FATAL', $message, $values);
+		exit();
 	}
 }

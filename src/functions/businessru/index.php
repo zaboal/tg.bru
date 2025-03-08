@@ -9,17 +9,13 @@ function handler($event = null, $context = null)
 {
 	$strings = require_once __DIR__ . '/strings.php';
 
+	$logger = new YandexFunctionsLogger(__CLASS__);
 	$tinybird = new TinybirdClient($_ENV['TOKEN']);
 	$telegram = new Nutgram($_ENV['API_KEY']);
 
 	/* ------------------- Validate and parse the request body ------------------ */
 
-	print(json_encode([
-		'level' => 'DEBUG',
-		'message' => 'Received a new event',
-		'context' => [
-			'event' => $event
-	]]) . PHP_EOL);
+	$logger->debug('Received a new event', ['event' => $event]);
 
 	if (!isset($event['body'])) exit(json_encode([
 		'level' => 'FATAL',
@@ -29,34 +25,19 @@ function handler($event = null, $context = null)
 
 	parse_str(base64_decode($event['body']), $params);
 	
-	print(json_encode([
-		'level' => 'DEBUG',
-		'message' => 'Parsed and Base64-decoded the request parameters in `body`',
-		'context' => [
-			'params' => $params
-	]]) . PHP_EOL);
+	$logger->debug('Decoded and parsed and the parameters inside the body', ['params' => $params]);
 	
-	$model = $params['model'] ?? null;
-	if (!isset($model) || $model !== 'discountcards') {
-		exit(json_encode([
-			'level' => 'FATAL',
-			'message' => 'Parameter `model` from the `body` is not `discountcards`',
-			'context' => ['model' => $model]
-		]));
-	}
+	$params['model'] ?? $logger->fatal('Parameter `model` from the `body` is not `discountcards`', ['model' => $model]);
 
 	/* ------------------- Extract and process the bonus sums ------------------- */
 
 	$param_changes = json_decode($params['changes']);
 	$param_data = json_decode($params['data']);
 
-	print(json_encode([
-		'level' => 'DEBUG',
-		'message' => 'Decoded JSONs at `changes` and `data` parameters',
-		'context' => [
-			'changes' => $param_changes,
-			'data' => $param_data
-	]]) . PHP_EOL);
+	$logger->debug('Decoded JSONs at `changes` and `data` parameters', [
+		'changes' => $param_changes,
+		'data' => $param_data
+	]);
 
 	$old_state = $param_changes->{0}->data;
 	$new_state = $param_data;
@@ -65,25 +46,13 @@ function handler($event = null, $context = null)
 	$new_sum = $new_state->bonus_sum;
 	$sum_change = $new_sum - $old_sum;
 
-	if ($sum_change == 0) exit(json_encode([
-		'level' => 'FATAL',
-		'message' => 'The `bonus_sum` has not changed',
-		'context' => ['old_sum' => $old_sum, 'new_sum' => $new_sum]
-	]));
-
-	print(json_encode([
-		'level' => 'DEBUG',
-		'message' => 'Processed the bonus sum changes',
-		'stream_name' => __CLASS__,
-		'context' => [
-			'args' => [
-				'old_sum' => $old_sum, 
-				'new_sum' => $new_sum, 
-				'sum_change' => $sum_change],
-			'frame' => [
-				'function' => __FUNCTION__,
-				'line' => __LINE__]
-	]]) . PHP_EOL);
+	$sum_change == 0 ? $logger->fatal(
+		'The `bonus_sum` has not changed', 
+		['old_sum' => $old_sum,'new_sum' => $new_sum]
+	) : $logger->debug(
+		'Calculated the bonus sum change', 
+		['sum_change' => $sum_change]
+	);
 
 	/* --------------------- Send a notification to the user -------------------- */
 
@@ -91,7 +60,7 @@ function handler($event = null, $context = null)
 		chat_id: $tinybird->query(
 				pipe: 'contacts_api',
 				params: ['phone_number' => $new_state->num]
-			)['data']['0']['telegram_id'],
+			)->{0}->telegram_id,
 		text: sprintf(
 			format: $strings[$sum_change < 0 ? 'decrease' : 'increase'],
 			values: [abs($sum_change), $new_sum]
