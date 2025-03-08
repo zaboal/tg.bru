@@ -19,8 +19,11 @@ function handler($event = null, $context = null)
 	print(json_encode([
 		'level' => 'DEBUG',
 		'message' => 'Received a new event',
-		'context' => ['event' => $event, 'post' => $_POST, 'get' => $_GET]
-	]));
+		'context' => [
+			'event' => $event, 
+			'post' => print_r($_POST), 
+			'get' => print_r($_GET)
+	]]));
 
 	if (!isset($event['body'])) exit(json_encode([
 		'level' => 'FATAL',
