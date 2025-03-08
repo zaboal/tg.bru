@@ -102,7 +102,7 @@ class TinybirdClient
 					'function' => __FUNCTION__,
 					'line' => __LINE__],
 				'values' => [
-					'curl_handle' => $ch]
+					'headers' => curl_getinfo($ch)]
 		]]) . PHP_EOL);
 
 		$response = curl_exec($ch);
