@@ -23,7 +23,7 @@ function handler($event = null, $context = null)
 	]));
 
 	$params = json_decode(base64_decode($event['body'], strict: true));
-	$model = $params['model'] ?? null;
+	$model = $params->model ?? null;
 
 	if (!isset($model) || $model !== 'discountcards') {
 		exit(json_encode([
