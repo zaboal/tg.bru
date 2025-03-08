@@ -93,6 +93,18 @@ class TinybirdClient
 			CURLOPT_TIMEOUT => 30
 		]);
 
+		print(json_encode([
+			'level' => 'DEBUG',
+			'message' => 'Initialized a cURL session',
+			'stream_name' => __CLASS__,
+			'context' => [
+				'frame' => [
+					'function' => __FUNCTION__,
+					'line' => __LINE__],
+				'values' => [
+					'curl_handle' => $ch]
+		]]) . PHP_EOL);
+
 		$response = curl_exec($ch);
 		curl_close($ch);
 
