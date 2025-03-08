@@ -20,7 +20,7 @@ class TinybirdClient
 				'frame' => [
 					'function' => __FUNCTION__,
 					'line' => __LINE__],
-				'args' => [
+				'values' => [
 					'token' => Redact::disguise($token),
 					'base_url' => $baseUrl ]
 		]]) . PHP_EOL);
@@ -55,7 +55,7 @@ class TinybirdClient
 				'frame' => [
 					'function' => __FUNCTION__,
 					'line' => __LINE__],
-				'args' => [
+				'values' => [
 					'url' => $url,
 					'query_params' => $queryParams]
 		]]) . PHP_EOL);
@@ -68,6 +68,18 @@ class TinybirdClient
 		if (!empty($params)) {
 			$url = $url . '?' . http_build_query($params);
 		}
+
+		print(json_encode([
+			'level' => 'DEBUG',
+			'message' => 'Formed the URL with query parameters',
+			'stream_name' => __CLASS__,
+			'context' => [
+				'frame' => [
+					'function' => __FUNCTION__,
+					'line' => __LINE__],
+				'values' => [
+					'url' => $url]
+		]]) . PHP_EOL);
 
 		$ch = curl_init();
 		curl_setopt_array($ch, [
@@ -92,9 +104,9 @@ class TinybirdClient
 				'frame' => [
 					'function' => __FUNCTION__,
 					'line' => __LINE__ ],
-				'args' => [
+				'values' => [
 					'response' => $response]
-			]]) . PHP_EOL);
+		]]) . PHP_EOL);
 
 		return json_decode(gzdecode($response));
 	}
