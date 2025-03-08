@@ -16,14 +16,20 @@ function handler($event = null, $context = null)
 
 	/* ------------------- Validate and parse the request body ------------------ */
 
+	print(json_encode([
+		'level' => 'DEBUG',
+		'message' => 'Received a new event',
+		'context' => ['event' => $event]
+	]));
+
 	if (!isset($event['body'])) exit(json_encode([
 		'level' => 'FATAL',
 		'message' => 'Parameter `body` is missing in the request',
 		'context' => ['requester_ip' => $event['requestContext']['identity']['sourceIp']]
 	]));
 
-	$params = json_decode(base64_decode($event['body'], strict: true));
-	$model = $params->model;
+	parse_str(base64_decode($event['body'], strict: true), $params);
+	$model = $params['model'] ?? null;
 
 	if (!isset($model) || $model !== 'discountcards') {
 		exit(json_encode([
