@@ -16,7 +16,9 @@ use bru\api\Client;
 
 function handler($event, $context)
 {
-	$tinybird = new TinybirdClient($_ENV['TINYBIRD_TOKEN']);
+	$tinybird = new TinybirdClient(
+		token: $_ENV['TINYBIRD_TOKEN'],
+		baseUrl: 'https://api.europe-west3.gcp.tinybird.co/v0');
 	$telegram = new Nutgram($_ENV['API_KEY']);
 	$bru = new Client(
 		account: $_ENV['ACCOUNT'],

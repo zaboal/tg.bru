@@ -8,7 +8,9 @@ use SergiX44\Nutgram\Nutgram;
 
 function handler($event = null, $context = null)
 {
-	$tinybird = new TinybirdClient($_ENV['TINYBIRD_TOKEN']);
+	$tinybird = new TinybirdClient(
+		token: $_ENV['TINYBIRD_TOKEN'],
+		baseUrl: 'https://api.europe-west3.gcp.tinybird.co/v0');
 	$telegram = new Nutgram($_ENV['TOKEN']);
 
 	/* ------------------- Validate and parse the request body ------------------ */
