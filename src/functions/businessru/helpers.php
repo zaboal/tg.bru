@@ -107,7 +107,7 @@ class YandexFunctionsLogger {
 	 * @param array|null $values Will be passed as `values` isnide the `context` key
 	 */
 	private function log(string $level, string $message, ?array $values = []): void {
-		$trace = debug_backtrace()[1];
+		$trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)[2];
 
 		print(json_encode([
 			'level' => $level,
