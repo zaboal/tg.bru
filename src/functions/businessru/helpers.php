@@ -109,8 +109,10 @@ class TinybirdClient
 		curl_close($ch);
 
 		print(json_encode([
-			'level' => 'DEBUG',
-			'message' => 'Sent the request and received a response',
+			'level' => $response->data == [] ? 
+				'WARN' : 'DEBUG',
+			'message' => $response->data == [] ? 
+				'Requested and received an empty response' : 'Request and received a response',
 			'stream_name' => __CLASS__,
 			'context' => [
 				'frame' => [
