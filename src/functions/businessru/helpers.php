@@ -16,9 +16,13 @@ class TinybirdClient
 			'level' => 'DEBUG',
 			'message' => 'Initialized Tinybird client',
 			'context' => [
-				'class' => get_class($this),
-				'token' => Redact::disguise($token),
-				'baseUrl' => $baseUrl
+				'frame' => [
+					'class' => __CLASS__,
+					'function' => __FUNCTION__,
+					'line' => __LINE__],
+				'args' => [
+					'token' => Redact::disguise($token),
+					'base_url' => $baseUrl ]
 		]]) . PHP_EOL);
 	}
 
@@ -47,9 +51,13 @@ class TinybirdClient
 			'level' => 'DEBUG',
 			'message' => 'Formed a query for the request',
 			'context' => [
-				'class' => get_class($this),
-				'url' => $url,
-				'query_params' => $queryParams
+				'frame' => [
+					'class' => __CLASS__,
+					'function' => __FUNCTION__,
+					'line' => __LINE__],
+				'args' => [
+					'url' => $url,
+					'query_params' => $queryParams]
 		]]) . PHP_EOL);
         
         return $this->sendRequest($url, $queryParams);
@@ -80,9 +88,13 @@ class TinybirdClient
 			'level' => 'DEBUG',
 			'message' => 'Sent the request and received a response',
 			'context' => [
-				'class' => get_class($this),
-				'response' => $response
-		]]) . PHP_EOL);
+				'frame' => [
+					'class' => __CLASS__,
+					'function' => __FUNCTION__,
+					'line' => __LINE__ ],
+				'args' => [
+					'response' => $response]
+			]]) . PHP_EOL);
 
 		return json_decode(gzdecode($response));
 	}

@@ -8,10 +8,11 @@ TAGS "1.0.2"
 NODE result
 SQL >
     %
-    SELECT contact_phone_number as number, telegram_contact_id as id
+    SELECT 
+        contact_phone_number as number, 
+        telegram_contact_id as id
     FROM contacts_mv
     WHERE
-        contact_phone_number = {{ UInt64(phone_number) }}
-        AND telegram_contact_id = {{ UInt64(telegram_id) }}
-        AND telegram_contact_id = telegram_from_id
-    LIMIT 1
+        telegram_contact_id = telegram_from_id
+        AND contact_phone_number = {{ UInt64(phone_number, required=False) }}
+        OR telegram_contact_id = {{ UInt64(telegram_id, required=False) }}
