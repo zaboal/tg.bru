@@ -20,10 +20,8 @@ function handler($event = null, $context = null)
 		'level' => 'DEBUG',
 		'message' => 'Received a new event',
 		'context' => [
-			'event' => $event, 
-			'post' => print_r($_POST), 
-			'get' => print_r($_GET)
-	]]));
+			'event' => $event
+	]]) . PHP_EOL);
 
 	if (!isset($event['body'])) exit(json_encode([
 		'level' => 'FATAL',
@@ -31,7 +29,8 @@ function handler($event = null, $context = null)
 		'context' => ['requester_ip' => $event['requestContext']['identity']['sourceIp']]
 	]));
 
-	$model = $_POST['model'] ?? null;
+	parse_str(urldecode($event['body']), $params);
+	$model = $params['model'] ?? null;
 
 	if (!isset($model) || $model !== 'discountcards') {
 		exit(json_encode([
