@@ -49,8 +49,19 @@ function handler($event = null, $context = null)
 
 	/* ------------------- Extract and process the bonus sums ------------------- */
 
-	$old_state = json_decode($params->changes->{0}->data);
-	$new_state = json_decode($params->data);
+	$param_changes = json_decode($params['changes']);
+	$param_data = json_decode($params['data']);
+
+	print(json_encode([
+		'level' => 'DEBUG',
+		'message' => 'Decoded JSONs at `changes` and `data` parameters',
+		'context' => [
+			'changes' => $param_changes,
+			'data' => $param_data
+	]]) . PHP_EOL);
+
+	$old_state = $param_changes->changes->{0}->data;
+	$new_state = $param_data->data;
 
 	$old_sum = $old_state->bonus_sum;
 	$new_sum = $new_state->bonus_sum;
