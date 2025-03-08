@@ -22,13 +22,7 @@ function handler($event = null, $context = null)
 		'context' => ['requester_ip' => $event['requestContext']['identity']['sourceIp']]
 	]));
 
-	parse_str(
-		string: base64_decode(
-			string: $event['body'],
-			strict: true
-		),
-		result: $params
-	);
+	$params = json_decode(base64_decode($event['body'], strict: true));
 	$model = $params['model'] ?? null;
 
 	if (!isset($model) || $model !== 'discountcards') {
@@ -41,11 +35,11 @@ function handler($event = null, $context = null)
 
 	/* ------------------- Extract and process the bonus sums ------------------- */
 
-	$old_state = json_decode($params['changes']['0']['data']);
-	$new_state = json_decode($params['data']);
+	$old_state = json_decode($params->changes->{0}->data);
+	$new_state = json_decode($params->data);
 
-	$old_sum = $old_state['bonus_sum'];
-	$new_sum = $new_state['bonus_sum'];
+	$old_sum = $old_state->bonus_sum;
+	$new_sum = $new_state->bonus_sum;
 	$sum_change = $new_sum - $old_sum;
 
 	if ($sum_change == 0) exit(json_encode([
@@ -59,7 +53,7 @@ function handler($event = null, $context = null)
 	$message = $telegram->sendMessage(
 		chat_id: $tinybird->query(
 			pipe: 'contacts_api',
-			params: ['phone_number' => $new_state->{'num'}]
+			params: ['phone_number' => $new_state->num]
 		)['data']['0']['telegram_id'],
 		text: sprintf(
 			format: $strings[$sum_change < 0 ? 'decrease' : 'increase'],
