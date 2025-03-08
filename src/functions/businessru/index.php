@@ -19,7 +19,7 @@ function handler($event = null, $context = null)
 	print(json_encode([
 		'level' => 'DEBUG',
 		'message' => 'Received a new event',
-		'context' => ['event' => $event]
+		'context' => ['event' => $event, 'post' => $_POST, 'get' => $_GET]
 	]));
 
 	if (!isset($event['body'])) exit(json_encode([
@@ -28,8 +28,7 @@ function handler($event = null, $context = null)
 		'context' => ['requester_ip' => $event['requestContext']['identity']['sourceIp']]
 	]));
 
-	parse_str(base64_decode($event['body'], strict: true), $params);
-	$model = $params['model'] ?? null;
+	$model = $_POST['model'] ?? null;
 
 	if (!isset($model) || $model !== 'discountcards') {
 		exit(json_encode([
