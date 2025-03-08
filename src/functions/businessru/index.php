@@ -75,11 +75,9 @@ function handler($event = null, $context = null)
 
 	$message = $telegram->sendMessage(
 		chat_id: $tinybird->query(
-			pipe: 'contacts_api',
-			params: [
-				'phone_number' => $new_state->num,
-				'telegram_id' => ' '
-		])['data']['0']['telegram_id'],
+				pipe: 'contacts_api',
+				params: ['phone_number' => $new_state->num]
+			)['data']['0']['telegram_id'],
 		text: sprintf(
 			format: $strings[$sum_change < 0 ? 'decrease' : 'increase'],
 			values: [abs($sum_change), $new_sum]

@@ -14,5 +14,5 @@ SQL >
     FROM contacts_mv
     WHERE
         telegram_contact_id = telegram_from_id
-        AND contact_phone_number = {{ UInt64(phone_number, required=False) }}
-        OR telegram_contact_id = {{ UInt64(telegram_id, required=False) }}
+        AND contact_phone_number = {{ UInt64(phone_number, 0) }}
+        OR telegram_contact_id = {{ UInt64(telegram_id, 0) }}
