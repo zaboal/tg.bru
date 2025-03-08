@@ -1,13 +1,14 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php'; 
-require_once __DIR__ . '/strings.php';
 require_once __DIR__ . '/helpers.php';
 
 use SergiX44\Nutgram\Nutgram;
 
 function handler($event = null, $context = null)
 {
+	$strings = require_once __DIR__ . '/strings.php';
+
 	$tinybird = new TinybirdClient(
 		token: $_ENV['TOKEN'],
 		baseUrl: 'https://api.europe-west3.gcp.tinybird.co/v0');
