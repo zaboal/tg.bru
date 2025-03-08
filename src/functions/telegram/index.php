@@ -4,21 +4,20 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/strings.php';
 
 use SergiX44\Nutgram\Nutgram;
-use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardButton;
-use SergiX44\Nutgram\Telegram\Types\Keyboard\InlineKeyboardMarkup;
-use SergiX44\Nutgram\Telegram\Types\Keyboard\KeyboardButton;
-use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardMarkup;
-use SergiX44\Nutgram\Telegram\Types\Keyboard\ReplyKeyboardRemove;
-use SergiX44\Nutgram\RunningMode\Functional;
-use bru\api\Client;
-use bru\api\NoCache;
 use SergiX44\Nutgram\RunningMode\Webhook;
+use SergiX44\Nutgram\Telegram\Types\Keyboard\{
+	InlineKeyboardButton,
+	InlineKeyboardMarkup,
+	KeyboardButton,
+	ReplyKeyboardMarkup,
+	ReplyKeyboardRemove};
+use bru\api\Client;
 
 function handler($event, $context)
 {
-	static $tinybird = new TinybirdClient($_ENV['TINYBIRD_TOKEN']);
-	static $telegram = new Nutgram($_ENV['API_KEY']);
-	static $bru = new Client(
+	$tinybird = new TinybirdClient($_ENV['TINYBIRD_TOKEN']);
+	$telegram = new Nutgram($_ENV['API_KEY']);
+	$bru = new Client(
 		account: $_ENV['ACCOUNT'],
 		secret: $_ENV['SECRET'],
 		app_id: (int) $_ENV['APP_ID'],

@@ -6,8 +6,8 @@ use SergiX44\Nutgram\Nutgram;
 
 function handler($event = null, $context = null)
 {
-	static $tinybird = new TinybirdClient($_ENV['TINYBIRD_TOKEN']);
-	static $telegram = new Nutgram($_ENV['TOKEN']);
+	$tinybird = new TinybirdClient($_ENV['TINYBIRD_TOKEN']);
+	$telegram = new Nutgram($_ENV['TOKEN']);
 
 	/* ------------------- Validate and parse the request body ------------------ */
 
@@ -54,7 +54,7 @@ function handler($event = null, $context = null)
 	$message = $telegram->sendMessage(
 		chat_id: $tinybird->query(
 			pipe: 'contacts_api',
-			params: ['phone_number' => $current_state->{'num'}]
+			params: ['phone_number' => $new_state->{'num'}]
 		)['data']['0']['telegram_id'],
 		text: sprintf(
 			format: $strings[$sum_change < 0 ? 'decrease' : 'increase'],
