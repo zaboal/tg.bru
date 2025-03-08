@@ -30,15 +30,15 @@ function handler($event = null, $context = null)
 	]));
 
 	parse_str(base64_decode($event['body']), $params);
-	$model = $params['model'] ?? null;
-
+	
 	print(json_encode([
 		'level' => 'DEBUG',
-		'message' => 'Parsed the request body',
+		'message' => 'Parsed and Base64-decoded the request parameters in `body`',
 		'context' => [
 			'params' => $params
 	]]) . PHP_EOL);
-
+	
+	$model = $params['model'] ?? null;
 	if (!isset($model) || $model !== 'discountcards') {
 		exit(json_encode([
 			'level' => 'FATAL',
@@ -60,8 +60,8 @@ function handler($event = null, $context = null)
 			'data' => $param_data
 	]]) . PHP_EOL);
 
-	$old_state = $param_changes->changes->{0}->data;
-	$new_state = $param_data->data;
+	$old_state = $param_changes->{0}->data;
+	$new_state = $param_data;
 
 	$old_sum = $old_state->bonus_sum;
 	$new_sum = $new_state->bonus_sum;
