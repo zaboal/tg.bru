@@ -9,9 +9,7 @@ function handler($event = null, $context = null)
 {
 	$strings = require_once __DIR__ . '/strings.php';
 
-	$tinybird = new TinybirdClient(
-		token: $_ENV['TOKEN'],
-		baseUrl: 'https://api.europe-west3.gcp.tinybird.co/v0');
+	$tinybird = new TinybirdClient($_ENV['TOKEN']);
 	$telegram = new Nutgram($_ENV['API_KEY']);
 
 	/* ------------------- Validate and parse the request body ------------------ */

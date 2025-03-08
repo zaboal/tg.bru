@@ -5,7 +5,7 @@ class TinybirdClient
 	private $token;
 	private $baseUrl;
 
-	public function __construct($token, $baseUrl = 'https://api.us-east.aws.tinybird.co/v0')
+	public function __construct($token, $baseUrl = 'https://api.tinybird.co/v0')
 	{
 		$this->token = $token;
 		$this->baseUrl = rtrim($baseUrl, '/');

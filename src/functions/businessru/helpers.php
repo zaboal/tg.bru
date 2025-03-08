@@ -7,7 +7,7 @@ class TinybirdClient
 	private $token;
 	private $baseUrl;
 
-	public function __construct($token, $baseUrl = 'https://api.us-east.aws.tinybird.co/v0')
+	public function __construct($token, $baseUrl = 'https://api.tinybird.co/v0')
 	{
 		$this->token = $token;
 		$this->baseUrl = rtrim($baseUrl, '/');
@@ -16,6 +16,7 @@ class TinybirdClient
 			'level' => 'DEBUG',
 			'message' => 'Initialized Tinybird client',
 			'context' => [
+				'class' => get_class($this),
 				'token' => Redact::disguise($token),
 				'baseUrl' => $baseUrl
 		]]) . PHP_EOL);
