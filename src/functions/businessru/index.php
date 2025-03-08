@@ -32,6 +32,13 @@ function handler($event = null, $context = null)
 	parse_str(urldecode($event['body']), $params);
 	$model = $params['model'] ?? null;
 
+	print(json_encode([
+		'level' => 'DEBUG',
+		'message' => 'Parsed the request body',
+		'context' => [
+			'params' => $params
+	]]) . PHP_EOL);
+
 	if (!isset($model) || $model !== 'discountcards') {
 		exit(json_encode([
 			'level' => 'FATAL',
