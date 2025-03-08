@@ -1,6 +1,8 @@
 <?php
 
+require_once __DIR__ . '/vendor/autoload.php'; 
 require_once __DIR__ . '/strings.php';
+require_once __DIR__ . '/helpers.php';
 
 use SergiX44\Nutgram\Nutgram;
 
