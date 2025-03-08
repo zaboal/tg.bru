@@ -1,20 +1,13 @@
 {
 	"minimum-stability": "dev",
 	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/sh1nez/bru.git"
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/sh1nez/nutgram.git"
-		}
-	],
+        {
+            "type": "vcs",
+            "url": "https://github.com/zaboal/php.bru.git"
+        }
+    ],
 	"require": {
-		"sh1nez/nutgram": "^1.1",
-		"sh1nez/bru": "dev-master"
-	},
-	"require-dev": {
-		"vlucas/phpdotenv": "^5.6"
+		"nutgram/nutgram": "^4.35",
+		"business-ru/business-online-sdk-php": "dev-main/php"
 	}
 }

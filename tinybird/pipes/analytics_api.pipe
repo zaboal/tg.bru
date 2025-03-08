@@ -1,0 +1,21 @@
+DESCRIPTION >
+    Crafting the bot's usage statistics.
+
+TOKEN "dashboard" READ
+
+TAGS "1.0.2"
+
+NODE extract
+SQL >
+    SELECT
+        CAST(JSON_VALUE(message, '$.date') AS INT) AS sent_at,
+        CAST(JSON_VALUE(message, '$.from.id') AS INT) AS sender_id
+    FROM messages_raw
+
+NODE result
+SQL >
+    SELECT
+        toDate(FROM_UNIXTIME(sent_at, '%Y-%m-%d')) as date,
+        count(DISTINCT sender_id) as unique_users_count
+    FROM extract
+    GROUP BY date

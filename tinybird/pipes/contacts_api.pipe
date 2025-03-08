@@ -1,0 +1,17 @@
+DESCRIPTION >
+    Phone numbers belonging to their Telegram User IDs.
+
+TOKEN "bot" READ
+
+TAGS "1.0.2"
+
+NODE result
+SQL >
+    %
+    SELECT contact_phone_number as number, telegram_contact_id as id
+    FROM contacts_mv
+    WHERE
+        contact_phone_number = {{ UInt64(phone_number) }}
+        AND telegram_contact_id = {{ UInt64(telegram_id) }}
+        AND telegram_contact_id = telegram_from_id
+    LIMIT 1

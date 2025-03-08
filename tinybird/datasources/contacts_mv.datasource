@@ -1,0 +1,12 @@
+DESCRIPTION >
+    Phone numbers assigned to Telegram IDs.
+
+TAGS "1.0.2"
+
+SCHEMA >
+    `contact_phone_number` UInt64,
+    `telegram_contact_id` UInt64,
+    `telegram_from_id` UInt64
+
+ENGINE ReplacingMergeTree
+ENGINE_SORTING_KEY contact_phone_number

@@ -16,3 +16,7 @@ composer.lock
 terraform.tfvars
 *.tfvars
 *.tfvars.json
+
+# --------------------------------- Tinybird --------------------------------- #
+.venv
+.tinyb

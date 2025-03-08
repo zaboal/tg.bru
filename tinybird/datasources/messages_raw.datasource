@@ -1,0 +1,13 @@
+DESCRIPTION >
+    [`message`](https://core.telegram.org/bots/api#message)s extracted from the [`update`](https://core.telegram.org/bots/api#update)s received from the Telegram Bot API.
+
+TOKEN "bot" APPEND
+
+TAGS "1.0.2"
+
+SCHEMA >
+    `message` String `json:$.data.message`
+
+ENGINE MergeTree
+ENGINE_SORTING_KEY message
+ENGINE_TTL fromUnixTimestamp(CAST(JSON_VALUE(message, '$.date' ) AS INT)) + INTERVAL 7 DAY

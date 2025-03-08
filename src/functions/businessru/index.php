@@ -1,99 +1,71 @@
 <?php
 
-function sendMessage($chat, $text)
+use SergiX44\Nutgram\Nutgram;
+
+function handler($event = null, $context = null)
 {
-	$data = [
-		'chat_id' => $chat,
-		'text' => $text
-	];
-	$api = $_ENV['API_KEY'];
-	$url = "https://api.telegram.org/bot$api/sendMessage";
-	$ch = curl_init();
+	static $strings = require __DIR__ . '/strings.php';
+	static $tinybird = new TinybirdClient($_ENV['TINYBIRD_TOKEN']);
+	static $telegram = new Nutgram($_ENV['TOKEN']);
 
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	/* ------------------- Validate and parse the request body ------------------ */
 
-	curl_exec($ch);
-	curl_close($ch);
-}
+	if (!isset($event['body'])) exit(json_encode([
+		'level' => 'FATAL',
+		'message' => 'Parameter `body` is missing in the request',
+		'context' => ['requester_ip' => $event['requestContext']['identity']['sourceIp']]
+	]));
 
-function getChat($phone)
-{
-	$phone = substr($phone, strlen($phone) - 10);
-	$token = $_ENV['TOKEN'];
+	parse_str(
+		string: base64_decode(
+			string: $event['body'],
+			strict: true
+		),
+		result: $params
+	);
+	$model = $params['model'] ?? null;
 
-	$url = 'https://api.us-east.aws.tinybird.co/v0/pipes/telegram_contacts.json';
-	$params = ['q' => "SELECT id FROM _ WHERE phone == '" . $phone . "'"];
-	$url = $url . '?' . http_build_query($params);
-
-	echo $url;
-
-	$ch = curl_init();
-	curl_setopt_array($ch, [
-		CURLOPT_URL => $url,
-		CURLOPT_HTTPHEADER => [
-			'Authorization: Bearer ' . $token,
-			'Accept-Encoding: gzip'
-		],
-		CURLOPT_RETURNTRANSFER => true,
-		CURLOPT_FOLLOWLOCATION => true,
-		CURLOPT_TIMEOUT => 30
-	]);
-
-	$response = curl_exec($ch);
-
-	echo $response;
-
-	$response = json_decode(gzdecode($response));
-	curl_close($ch);
-
-	if (! $response->data[0]) {
-		return false;
-	}
-	
-	return (int)$response->data[0]->id;
-}
-
-function handler($event, $context)
-{
-	$text = require __DIR__ . '/texts.php';
-
-	if (!isset($event['body'])) {
-		exit("Missing required 'body' parameter in request");
+	if (!isset($model) || $model !== 'discountcards') {
+		exit(json_encode([
+			'level' => 'FATAL',
+			'message' => 'Parameter `model` from the `body` is not `discountcards`',
+			'context' => ['model' => $model]
+		]));
 	}
 
-	$body = base64_decode($event['body'], true);
-	parse_str($body, $params);
+	/* ------------------- Extract and process the bonus sums ------------------- */
 
-	if (!isset($params['model']) || $params['model'] !== 'discountcards') {
-		exit("Parameter 'model' must be 'discountcards'");
-	}
-	
-	$changes = json_decode($params['changes']);
-	$data = json_decode($params['data']);
+	$old_state = json_decode($params['changes']['0']['data']);
+	$new_state = json_decode($params['data']);
 
-	$old_sum = $changes->{'0'}->{'data'}->{'bonus_sum'};
-	$new_sum = $data->{'bonus_sum'};
-	$delta_sum = $new_sum - $old_sum;
+	$old_sum = $old_state['bonus_sum'];
+	$new_sum = $new_state['bonus_sum'];
+	$sum_change = $new_sum - $old_sum;
 
-	if ($delta_sum < 0) {
-		$text = sprintf($text['decrease'], abs($delta_sum), $new_sum);
-	} elseif ($delta_sum > 0) {
-		$text = sprintf($text['increase'], abs($delta_sum), $new_sum);
-	} else {
-		exit("No changes in bonus sum");
-	}
+	if ($sum_change == 0) exit(json_encode([
+		'level' => 'FATAL',
+		'message' => 'The `bonus_sum` has not changed',
+		'context' => ['old_sum' => $old_sum, 'new_sum' => $new_sum]
+	]));
 
-	$id = getChat($data->{'num'});
-	sendMessage($id, $text);
+	/* --------------------- Send a notification to the user -------------------- */
+
+	$message = $telegram->sendMessage(
+		chat_id: $tinybird->query(
+			pipe: 'contacts_api',
+			params: ['phone_number' => $current_state->{'num'}]
+		)['data']['0']['telegram_id'],
+		text: sprintf(
+			format: $strings[$sum_change < 0 ? 'decrease' : 'increase'],
+			values: [abs($sum_change), $new_sum]
+		)
+	);
 
 	return [
-		'statusCode' => 200,
+		'statusCode' => $message !== null ? 200 : 500,
 		'body' => json_encode([
-			'status' => 'success',
-			'message' => 'Notification sent successfully'
+			'status' => $message !== null ? 'success' : 'error',
+			'message' => $message !== null ? 'Notification sent successfully' : 'Failed to send notification'
 		])
 	];
 }

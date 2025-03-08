@@ -1,0 +1,25 @@
+DESCRIPTION >
+    Extracting the sender and contact information from the messages.
+
+TAGS "1.0.2"
+
+NODE extract
+SQL >
+    SELECT
+        JSON_VALUE(message, '$.from.id') AS sender_id,
+        JSON_VALUE(message, '$.contact.user_id') AS contact_id,
+        JSON_VALUE(message, '$.contact.phone_number') AS contact_phone
+    FROM messages_raw
+    WHERE contact_id <> ''
+
+NODE result
+SQL >
+    SELECT DISTINCT
+        toUInt64(RIGHT(contact_phone, 10)) as contact_phone_number,
+        toUInt64(contact_id) as telegram_contact_id,
+        toUInt64(sender_id) as telegram_from_id
+    FROM extract
+    WHERE contact_phone <> ''
+
+TYPE MATERIALIZED
+DATASOURCE contacts_mv
