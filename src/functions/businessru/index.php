@@ -29,7 +29,7 @@ function handler($event = null, $context = null)
 		'context' => ['requester_ip' => $event['requestContext']['identity']['sourceIp']]
 	]));
 
-	parse_str(urldecode($event['body']), $params);
+	parse_str(base64_decode($event['body']), $params);
 	$model = $params['model'] ?? null;
 
 	print(json_encode([
