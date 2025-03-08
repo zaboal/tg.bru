@@ -117,7 +117,7 @@ class TinybirdClient
 					'function' => __FUNCTION__,
 					'line' => __LINE__ ],
 				'values' => [
-					'response' => $response]
+					'response' => print_r($response)]
 		]]) . PHP_EOL);
 
 		return json_decode(gzdecode($response));
